@@ -1,6 +1,11 @@
 site_name: ZCETHAN's Blog
-site_url: https://localhost:8000/mysite
+site_url: https://zc-ethan.github.io/CKCmix/
+site_author: ZCETHAN
+repo_url: https://github.com/Zc-Ethan/CKCmix
+repo_name: Zc-Ethan/CKCmix
 theme:
+  icon:
+    repo: fontawesome/brands/github
   name: material
   language: zh
   font:
@@ -13,8 +18,8 @@ theme:
       toggle:
         icon: material/toggle-switch
         name: Switch to dark mode
-      accent: cyan
-      primary: indigo
+      accent: light green
+      primary: teal
 
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
@@ -22,19 +27,60 @@ theme:
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to light mode
-      accent: cyan
-      primary: indigo
+      accent: amber
+      primary: brown
   features:
+    - toc.follow
     - navigation.tabs
     - navigation.prune
     - navigation.top
+    - navigation.footer
 
 markdown_extensions:
+  - abbr
   - admonition
-  - pymdownx.details
-  - pymdownx.superfences
-  - md_in_html
   - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
   - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: squidfunk
+      repo: mkdocs-material
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      auto_append:
+        - includes/mkdocs.md
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
