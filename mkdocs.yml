@@ -84,3 +84,11 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
+
+nav:
+  - 个人主页: index.md
+  - 大一秋冬:
+    - 大一秋冬/大一上课程综述.md
+  - 大一春夏: 
+    - 大一春夏/普通化学实验.md
+    - 大一春夏/普通物理学实验Ⅰ.md
