@@ -4,7 +4,9 @@ site_author: ZCETHAN
 repo_url: https://github.com/Zc-Ethan/CKCmix
 repo_name: Zc-Ethan/CKCmix
 theme:
+  favicon: assets/logo.png
   icon:
+    logo: material/material-ui
     repo: fontawesome/brands/github
   name: material
   language: zh
