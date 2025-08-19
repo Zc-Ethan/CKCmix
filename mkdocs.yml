@@ -35,14 +35,17 @@ theme:
     - navigation.prune
     - navigation.top
     - navigation.footer
+    - content.tooltips
 
 markdown_extensions:
+  - tables
   - abbr
   - admonition
   - attr_list
   - def_list
   - footnotes
   - md_in_html
+  - pymdownx.snippets
   - toc:
       permalink: true
   - pymdownx.arithmatex:
@@ -87,6 +90,8 @@ markdown_extensions:
 
 nav:
   - 个人主页: index.md
+  - 食在浙大:
+    - 食在浙大/紫金港校区.md
   - 大一秋冬:
     - 大一秋冬/大一上课程综述.md
   - 大一春夏: 
