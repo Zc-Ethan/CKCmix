@@ -93,9 +93,9 @@ markdown_extensions:
 nav:
   - 个人主页: index.md
   - 食在浙大:
-    - 食在浙大/紫金港校区.md
+    - eat_in_zju/ZJGcampus.md
   - 大一秋冬:
-    - 大一秋冬/大一上课程综述.md
+    - G1auwi/lessonsummary.md
   - 大一春夏: 
-    - 大一春夏/普通化学实验.md
-    - 大一春夏/普通物理学实验Ⅰ.md
+    - G1spsu/gen_chem_exp.md
+    - G1spsu/gen_phy_exp_1.md
