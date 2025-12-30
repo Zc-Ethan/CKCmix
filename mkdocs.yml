@@ -39,17 +39,18 @@ theme:
     - navigation.footer
     - content.tooltips
 
+
 markdown_extensions:
-  - tables
-  - abbr
-  - admonition
-  - attr_list
-  - def_list
-  - footnotes
-  - md_in_html
-  - pymdownx.snippets
-  - toc:
+  # ===== 核心修改：删除 'pymdownx.extra'，改为显式声明基础扩展 =====
+  - tables        # 支持表格
+  - admonition    # 支持警告框
+  - footnotes     # 支持脚注
+  - attr_list     # 支持属性列表
+  - def_list      # 支持定义列表
+  - md_in_html    # 支持在HTML标签内写Markdown
+  - toc:          # 支持目录，并启用永久链接
       permalink: true
+  # ===== 你原有且需要的 pymdownx 增强扩展 (确保不重复) =====
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.betterem:
@@ -72,6 +73,7 @@ markdown_extensions:
       repo: mkdocs-material
   - pymdownx.mark
   - pymdownx.smartsymbols
+  # !!! 重要：snippets 只保留下面这一个带配置的 !!!
   - pymdownx.snippets:
       auto_append:
         - includes/mkdocs.md
@@ -99,3 +101,6 @@ nav:
   - 大一春夏: 
     - G1spsu/gen_chem_exp.md
     - G1spsu/gen_phy_exp_1.md
+  - 大二秋冬:
+    - 高级数据结构与算法: 
+      - G2auwi/ADS/15ExternalSorting.md

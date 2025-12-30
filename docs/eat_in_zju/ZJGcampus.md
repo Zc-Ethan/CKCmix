@@ -1,4 +1,7 @@
 ---
+date: 2025-8-20
+authors:
+    - ZCETHAN
 title: 紫金港校区
 ---
 
