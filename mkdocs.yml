@@ -3,6 +3,7 @@ site_url: https://zc-ethan.github.io/CKCmix/
 site_author: ZCETHAN
 repo_url: https://github.com/Zc-Ethan/CKCmix
 repo_name: Zc-Ethan/CKCmix
+
 theme:
   favicon: assets/logo.png
   icon:
@@ -38,23 +39,34 @@ theme:
     - navigation.top
     - navigation.footer
     - content.tooltips
+    - content.code.select
+    - content.code.copy
 
+# 数学公式支持：从 MathJax 切换到 KaTeX
+extra_javascript:
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 markdown_extensions:
-  # ===== 核心修改：删除 'pymdownx.extra'，改为显式声明基础扩展 =====
-  - tables        # 支持表格
-  - admonition    # 支持警告框
-  - footnotes     # 支持脚注
-  - attr_list     # 支持属性列表
-  - def_list      # 支持定义列表
-  - md_in_html    # 支持在HTML标签内写Markdown
-  - toc:          # 支持目录，并启用永久链接
+  # 基础扩展
+  - tables
+  - admonition
+  - footnotes
+  - attr_list
+  - def_list
+  - md_in_html
+  - toc:
       permalink: true
-  # ===== 你原有且需要的 pymdownx 增强扩展 (确保不重复) =====
+
+  # ===== 关键修改 1：修正 pymdownx.arithmatex 以启用 KaTeX =====
   - pymdownx.arithmatex:
       generic: true
+
+  # ===== 关键修改 2：解决中文加粗问题 =====
   - pymdownx.betterem:
-      smart_enable: all
+      smart_enable: all_except_midword  # 允许 **中文** 这种紧邻中文的加粗语法
+
+  # 其他 pymdownx 增强扩展 (保持原有配置)
   - pymdownx.caret
   - pymdownx.details
   - pymdownx.emoji:
@@ -73,7 +85,6 @@ markdown_extensions:
       repo: mkdocs-material
   - pymdownx.mark
   - pymdownx.smartsymbols
-  # !!! 重要：snippets 只保留下面这一个带配置的 !!!
   - pymdownx.snippets:
       auto_append:
         - includes/mkdocs.md
@@ -103,4 +114,5 @@ nav:
     - G1spsu/gen_phy_exp_1.md
   - 大二秋冬:
     - 高级数据结构与算法: 
+      - G2auwi/ADS/14ParallelAlgorithms.md
       - G2auwi/ADS/15ExternalSorting.md
