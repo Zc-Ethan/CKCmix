@@ -2,7 +2,7 @@
 date: 2025-12-31
 authors:
     - ZCETHAN
-title: 15:Randomized Algorithms
+title: 13:Randomized Algorithms
 ---
 
 **随机化算法(Randomized Algorithms)**在实际场景中应用广泛，这一讲将用两个例子来详细解析随机化算法。
