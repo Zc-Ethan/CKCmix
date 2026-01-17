@@ -115,6 +115,7 @@ nav:
   - 大二秋冬:
     - 高级数据结构与算法: 
       - G2auwi/ADS/10NP-Completeness.md
+      - G2auwi/ADS/11Approximation.md
       - G2auwi/ADS/12LocalSearch.md
       - G2auwi/ADS/13RandomizedAlgorithms.md
       - G2auwi/ADS/14ParallelAlgorithms.md
