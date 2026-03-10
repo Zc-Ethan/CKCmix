@@ -113,6 +113,7 @@ nav:
     - G1spsu/gen_chem_exp.md
     - G1spsu/gen_phy_exp_1.md
   - 大二秋冬:
+    - G2auwi/index.md
     - 高级数据结构与算法: 
       - G2auwi/ADS/10NP-Completeness.md
       - G2auwi/ADS/11Approximation.md
@@ -120,3 +121,6 @@ nav:
       - G2auwi/ADS/13RandomizedAlgorithms.md
       - G2auwi/ADS/14ParallelAlgorithms.md
       - G2auwi/ADS/15ExternalSorting.md
+  - 大二春夏:
+    - 数据库系统:
+      - G2spsu/DataBase/lec02.md
