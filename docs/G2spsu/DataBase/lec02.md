@@ -32,6 +32,7 @@ title: lec02 Relational Model
 关系首先关心两个概念：**关系模型（schema）和关系实例（instance）**。二者就像是变量的类型名称和实际值之间的关系。关系模型描述关系的大致结构，而关系实例就是关系中的具体的数据。
 
 关系的性质：
+
 - 元组之间的**顺序**是无关于关系的；
 - 同一个关系中不能存在冗余的元组（要**去重**）；
 - 属性值拥有**原子性**。
@@ -60,7 +61,7 @@ title: lec02 Relational Model
 
 ### Porject
 
-记号：$\prod_{A_1,A_2,\dots,A_k}(r)$
+记号：$\Pi_{A_1,A_2,\dots,A_k}(r)$
 
 其中 $A_i$ 为属性的子集。其意义是仅保留关系中对应属性的列，然后**进行去重**。这一过程与多维向量在广义平面上进行投影的过程十分相似，所以应该不难理解为什么称该操作为投影。
 
@@ -120,7 +121,7 @@ $$
 由于只需要 loan number，所以作投影即可：
 
 $$
-\prod\nolimits_{loan-number}(\sigma_{amount>1200}(loan))
+\Pi_{loan-number}(\sigma_{amount>1200}(loan))
 $$
 
 > E3: Find the names of all customers who have a loan, or an account, or both, from the bank.
@@ -128,7 +129,7 @@ $$
 我们看到了关键字 or，那么显然就是并操作。同时它只需要保留 name，因此：
 
 $$
-\prod\nolimits_{customer-name}(borrower)\cup \prod\nolimits_{customer-name}(depositor)
+\Pi_{customer-name}(borrower)\cup \Pi_{customer-name}(depositor)
 $$
 
 > E4: Find the names of all customers who at least have a loan and an account at bank.
@@ -136,7 +137,7 @@ $$
 or 变成 and 了，所以直接用交。交前面没讲，是因为交操作可以用并和差来实现。
 
 $$
-\prod\nolimits_{customer-name}(borrower)\cap \prod\nolimits_{customer-name}(depositor)
+\Pi_{customer-name}(borrower)\cap \Pi_{customer-name}(depositor)
 $$
 
 > E5: Find the names of all customers who have a loan at the Perryridge branch.
@@ -144,13 +145,13 @@ $$
 由于这二者的信息存储在不同的表里，所以想到用笛卡尔积来合并两表的信息。合并之后我们用外码筛选出合法的信息，然后再筛选银行的名字，最后投影到账户名上。
 
 $$
-\prod\nolimits_{customer-name}(\sigma_{branch-name='Perryridge'}(\sigma_{borrower.loan-number=loan.loan-number}(borrower\times loan)))
+\Pi_{customer-name}(\sigma_{branch-name='Perryridge'}(\sigma_{borrower.loan-number=loan.loan-number}(borrower\times loan)))
 $$
 
 当然我们可以先筛选再做笛卡尔积。此时作积时的表格变得更小了，在这种情况下，复杂度更低。因此我们更倾向于这种写法：
 
 $$
-\prod\nolimits_{customer-name}(\sigma_{borrower.loan-number=loan.loan-number}(borrower\times (\sigma_{branch-name='Perryridge'}(loan))))
+\Pi_{customer-name}(\sigma_{borrower.loan-number=loan.loan-number}(borrower\times (\sigma_{branch-name='Perryridge'}(loan))))
 $$
 
 > E6: Find the largest account balance.
@@ -159,9 +160,89 @@ $$
 作笛卡尔积，然后筛选出所有前者小于后者的元组，这样前者对应的账户一定不是最大的。而且这个并集是充分的，所以去除这些账户剩下的，就是最大值了。
 
 $$
-\prod\nolimits_{balance}(account)-\prod\nolimits_{account.balance}(\sigma_{account.balance<d.balance}(account\times \rho_d(account)))
+\Pi_{balance}(account)-\Pi_{account.balance}(\sigma_{account.balance<d.balance}(account\times \rho_d(account)))
 $$
 
 ## Additional Relational-Algebra Operations
+
+### Set-Intersection
+
+记号：$r\cap s$
+
+交的操作与并、差相似，也需要两个关系等目相容。
+
+我们之前说交可以用前面基础的运算得到，即：$r\cap s=r-(r-s)$。
+
+### Natural Join
+
+记号：$r\bowtie s$
+
+前面我们在合并两个关系的时候用笛卡尔积的方式，我们说过，如果两个关系有相同属性，则需要把相同的属性分别命名后列出。但是在多数情况下，两种关系只会有一个属性相同，并且该属性是主码或者外码，此时更符合直观的做法是将相同属性相同的元组取出来作为结果。
+
+这么说有点抽象，可以想象一下两个学生名单，一个是个人信息，一个是成绩表。两个名单都有学生学号这一属性，但是其它属性都各不相同。因此如果我们想知道某人（名字）对应的成绩是多少，我们会希望把两表合并。如果用笛卡尔积，则我们需要再筛选出两个关系学号相同的元组。但是自然合并允许我们略去这一步直接得到自然的合并结果。
+
+同时，根据以上表述，如果我们有关系 $r(A,B,C,D),s(B,D,E)$，那么：
+
+$$
+r\bowtie s=\Pi_{r.A,r.B,r.C,r.D,s.E}(\sigma_{r.B=s.B\land r.D=s.D}(r\times s))
+$$
+
+??? example "示例"
+    ![](./src/lec02_8.png)
+
+### Theta Join
+
+记号：$r\bowtie_{\theta} s$
+
+有的时候自然合并无法满足我们的需求，所以我们定义条件合并，可以在笛卡尔积后跟上一个筛选条件，让式子简化一些。本质上是一个补丁。即：$r\bowtie_{\theta} s=\sigma_{\theta}(r\times s)$
+
+### Division
+
+记号：$r\div s$
+
+在一些语境下，我们希望在一个关系中找满足所有的条件的元组。也就是 for all 这样一个关键字。我们可以用除法。如果 $r$ 关系中有属性 $A_1,A_2,\dots,A_n,B_1,B_2,\dots,B_m$，而 $s$ 关系中有 $B_1,B_2,\dots,B_m$，则除法就是在 $r$ 中对于 $A$ 属性相同的元组，如果其 $B$ 属性覆盖了 $s$ 中所有情况，则其成为商的一个元组。
+
+根据如上描述，有：
+
+$$
+r(R)\div s(S)=\Pi_{R-S}(r)-\Pi_{R-S}((\Pi_{R-S}(r)\times s)-\Pi_{R-S,S}(r))
+$$
+
+??? example "示例"
+    ![](./src/lec02_9.png)
+
+### Assignment
+
+记号：$\leftarrow$
+
+用来简化逻辑表达。表现上就是将一个语句赋值为一个变量。如果此后的逻辑语句中需要用到该语句，则可以直接使用该变量代替。有点类似于 C 语言中的 `#define`。
+
+### Example Queries
+
+我们仍然以上面的银行数据库为例。
+
+> E1: Find all customers who have an account from at least the “Downtown” and the “Uptown” branches. 
+
+想要找到所有有 Downtown 和 Uptown 账户的客户。本来我们会需要对 depositor 和 account 作笛卡尔积，然后筛选出满足条件的账户的名字，最后再对二者求交，因为我们需要两个分支都有。那么我们现在可以直接使用自然合并，然后直接选，可以使式子简便不少。或者呢，我们可以直接创建一个包含两个支行名字的关系，然后用除法的方式代替作一次交。
+
+??? answer "答案"
+    ![](./src/lec02_10.png)
+
+> E2: Find all customers who have an account at all branches located in Brooklyn city.
+
+看到了 all，可以想到把 Brooklyn 城里的支行筛出来，然后做除法就可以了。
+
+??? answer "答案"
+    ![](./src/lec02_11.png)
+
 ## Extended Relational-Algebra Operations
+
+除了上述基本的关系代数运算之外，我们还提供了一些简化表达式的扩展运算。
+
+### Generalized Projection
+
+记号：$\Pi_{F_1,F_2,\dots,F_n}(E)$
+
+广义投影是指对关系的某些属性进行运算的过程
+
 ## Modification of the Database
