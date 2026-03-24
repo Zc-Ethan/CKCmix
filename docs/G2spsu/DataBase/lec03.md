@@ -538,3 +538,131 @@ SQL 还提供了一个用来判断是否有重复元组的谓词 `unique`。一�
         account.branch_name = ‘Perryridge’) 
     ```
 
+## Views
+
+视图是基于物理层的关系，通过选取组合而成的逻辑层的产物，在复杂逻辑和需要隐藏敏感信息的情况下有关键的作用。
+
+创建视图的范式如下：
+
+```SQL
+CREATE VIEW <v_name> AS SELECT c1, c2, ... From ... 
+CREATE VIEW <v_name> (c1, c2, ...) AS SELECT e1, e2, ... FROM ... 
+```
+
+当然，我们也可以从全局删除一个视图，如下：
+
+```SQL
+DROP VIEW <v_name>
+```
+
+!!! example
+    > Create a view consisting of branches and their customer names. 
+
+    ```sql
+    CREAT view all_customer as 
+        ((SELECT branch_name, customer_name FROM depositor, account 
+        WHERE depositor.account_number = account.account_number) union
+        (SELECT branch_name, customer_name FROM borrower, loan 
+        WHERE borrower.loan_number = loan.loan_number)) 
+    ```
+
+    > Then, find all customers at the Perryridge branch. 
+
+    ```sql
+    SELECT customer_name FROM all_customer 
+    WHERE branch_name = ‘Perryridge’ 
+    ```
+
+下面我们对所谓的逻辑层数据独立性作出说明。若我们原有关系 S(a,b,c)，现为了避免数据冗余，在物理层将其分为两个关系 S(a,b) 和 T(b,c)。但是只要我在逻辑层想要取出关系表格 S(a,b,c)，可以将两个关系作自然连接后创建视图，等效于我们原本的关系。
+
+## Derived Relations 
+
+但是有的时候我们并不想要在全局创建一个视图，而是对于每个询问都分别地进行创建，我们可以使用派生关系。
+
+!!! example
+    > Find the average account balance of those branches where the average account balance is greater than $500. 
+
+    ```sql
+    SELECT branch_name, avg_bal
+    FROM (SELECT branch_name, avg(balance) 
+        FROM account 
+        GROUP BY branch_name) 
+        as result (branch_name, avg_bal) 
+    WHERE avg_bal > 500
+    ```
+
+在上面这个例子中，我们把 `FROM` 分句后面的关系改成了一个子查询，这就是派生关系，它的写法和视图创建类似，但是没有 `CREATE VIEW` 关键字标识。这一写法和本地视图是等价的。
+
+`WITH` 分句也支持在本地而非全局创建视图，对比上述写法，`WITH` 分句更加清晰，写起来也更加方便。
+
+`WITH` 分句是写在查询的开头，直接在本地定义视图。
+
+!!! example
+    > Find all accounts with the maximum balance. 
+
+    ```sql
+    WITH max_balance(value) as 
+        SELECT max(balance) 
+        FROM account 
+    SELECT account_number
+    FROM account, max_balance 
+    WHERE account.balance = max_balance.value 
+    ```
+
+可以看到，使用视图之后找最大值就不需要嵌套子查询了。下面有个更加复杂的例子，可以更明显地看出 `WITH` 分句的便利之处。
+
+!!! example "e.g.1"
+    > Find all branches where the total account deposit is greater than the average of the total account deposits at all branches.
+
+    ```sql
+    WITH branch_total(branch_name, a_bra_total) as 
+        SELECT branch_name, sum(balance) 
+        FROM account 
+        GROUP BY branch_name 
+    WITH total_avg(value) as 
+        SELECT avg(a_bra_total) 
+        FROM branch_total 
+    SELECT branch_name, a_bra_total 
+    FROM branch_total A, total_avg B 
+    WHERE A.a_bra_total >= B.value
+    ```
+
+    书写思路：要找分支的总金额，就可以直接创建一个关于分支和总金额的视图，在该视图基础上，可以求出平均总金额。然后利用这两个视图可以求出大于均值的分支名。
+
+!!! example "e.g.2"
+    > Find the student names who have enrolled more than 10 courses. 
+
+    ```sql
+    SELECT TT.sno, sname, c_num 
+    FROM (SELECT sno, count(cno) as c_num
+        FROM enroll
+        GROUP BY sno) as TT, student S 
+    WHERE TT.sno = S.sno and c_num > 10 
+    ```
+
+    在这里我们需要强调，无论是否需要引用派生关系的导出表，我们都**必须赋予**其别名。
+
+综上，我们看到了局部视图的写法，下面通过对一个问题的具体分析来总结视图的用法。
+
+> Given: employee(id, name, age, gender, salary, boss), Find the employee who has the maximum number of underlings. 
+
+每个员工都有一个上司，那么我们要找一个下属最多的员工，我们可以先把员工按上司分组，然后使用 count 来计算对应上司的下属个数，创建一个视图。在该视图的基础上，我们用聚集函数 max 求出最多的下属个数。然后在最终的查询语句中查询个数等于这个最大值的员工编号即可。
+
+??? answer
+    ```sql
+    WITH ud_count(id, ud_num) as
+        SELECT boss, count(id)
+        FROM employee
+        GROUP by boss
+    WITH max_ud(max_num) as
+        SELECT max(ud_num)
+        FROM ud_count
+    SELECT id
+    FROM ud_count, max_ud
+    WHERE ud_num >= max_num
+    ```
+
+## Modification of the Database
+
+### Deletion 
+
