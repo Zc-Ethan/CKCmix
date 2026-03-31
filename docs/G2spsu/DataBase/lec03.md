@@ -499,7 +499,7 @@ SQL 为我们提供了谓词 `SOME`，来表示集合中存在某个值。对应
 
 ### Test for Empty Relations
 
-子查询的结果可能为空，此时我们可以用谓词 `exist` 来测试子查询的结果是否为空，从而实现一些判断。当然也可以在前面加上 `not` 来判断结果不是空。该谓词可以用来实现除法。如下：
+子查询的结果可能为空，此时我们可以用谓词 `exists` 来测试子查询的结果是否为空，从而实现一些判断。当然也可以在前面加上 `not` 来判断结果不是空。该谓词可以用来实现除法。如下：
 
 我们要将如图给关系代数表达式转化为 SQL 语言。
 
@@ -665,4 +665,175 @@ DROP VIEW <v_name>
 ## Modification of the Database
 
 ### Deletion 
+
+删除操作可以删去表格或者视图中符合条件的元组。它基本的范式如下：
+
+```SQL
+DELETE FROM <table | view> 
+[WHERE <condition>] 
+```
+
+下面通过几个例子来说明删除在实用中的用法：
+
+!!! example
+    > Delete all accounts and relevant information at depositor for every branch located in Needham city. 
+
+    ```sql
+    DELETE FROM depositor
+    WHERE account_number in 
+        (SELECT account_number 
+        FROM branch B, account A 
+        WHERE branch_city = ‘Needham’ and 
+            B.branch_name = A.branch_name)
+    DELETE FROM account
+    WHERE branch_name in (SELECT branch_name 
+                        FROM branch
+                        WHERE branch_city = ‘Needham’) 
+    ```
+
+    在这个例子中需要注意，前后两条指令不能调换顺序。如果先把 account 中的元组删除了，那么在删除 depositor 中的元组的时候就会出错。
+
+    同时，我们可能会希望能够用一条语句来实现整个删除的过程。但是这也是不被允许的，因为如果在 `DELETE FROM` 谓词后面放多个表格，系统就难以识别哪些需要删除而哪些只是作为判断根据。
+
+在删除的过程中，我们可能对聚集函数的结果产生影响，那在这种情况下，我们是如何考虑的呢？我们看一下这个例子：
+
+!!! example
+    > Delete the record of all accounts with balances below the average at the bank.
+
+    ```sql
+    DELETE FROM account
+    WHERE balance < (SELECT avg(balance)
+                    FROM account)
+    ```
+
+    在这个查询中，每次删除一个元组都会对平均值产生影响，那么这个查询是否可以进行呢？
+
+    答案是可以的。因为我们约定，在 SQL 中，内层查询除非引入了外层的变量，否则只计算一遍。
+
+### Insertion
+
+插入就是往表格中加入元组，其范式如下：
+
+```sql
+INSERT INTO <table|view> [(c1, c2,...)]
+VALUES (e1, e2, ...)
+
+INSERT INTO <table|view> [(c1, c2,...)]
+SELECT e1, e2, ...
+FROM ...
+```
+
+当插入的数据中没有对应属性的数据，则可以用 null 作为值插入。当然与删除相似的，我们可能希望从当前表格中查询得到一些元组，然后将这个元组再插入同一个表格。在这种情况下，我们约定：
+
+> 在执行任何的插入之前，`SELECT FROM WHERE` 语句将会被完全执行并得出结果。
+
+所以在插入操作中，如下操作是完全正确的：
+
+```sql
+INSERT INTO table1
+SELECT *
+FROM table1
+```
+
+### Update
+
+修改就是修改表格中某些元组的某些属性的数据。其对应范式如下：
+
+```sql
+UPDATE <table | view>
+SET <c1 = e1 [, c2 = e2, ...]> [WHERE <condition>]
+```
+
+修改和删除一样，需要非常注意修改的顺序，否则会出现错误。
+
+!!! example
+    > Increase all accounts with balances over $10,000 by 6%, all other accounts receive 5%.
+
+    ```sql
+    UPDATE account
+    SET balance = balance * 1.06
+    WHERE balance > 10000
+    UPDATE account
+    SET balance = balance * 1.05
+    WHERE balance <= 10000
+    ```
+
+    注意在上述查询中，两次 `UPDATE` 不能调换顺序，否则可能会出现某些余额同时在两个分支中都被筛出。
+
+这样一来，实用 `UPDATE` 看起来会比较烧脑。不过 SQL 还提供了一个更接近 C 语言的语法：
+
+```sql
+UPDATE account
+SET balance = case
+                when balance <= 10000
+                then balance * 1.05
+                else balance * 1.06
+            end
+```
+
+### View Update
+
+当然，我们也可以对已经创建的视图进行修改。但是我们需要注意，视图可能是由多种表格进行筛查合并之后得到的，在这种情况下，如果对视图进行增删改操作，会使得结构混乱，因此是不被允许的。
+
+那什么样的视图可以被修改呢？我们定义 **"行列视图"**，为建立在单个基本表上的视图，且视图的列对应表的列。
+
+### Indexes
+
+然后是我们之前就提到过索引的建立。建立索引的作用是让查询的过程可以使用数据结构来加速优化。
+
+### Transactions
+
+它的中文应该译作业务，指的是一连串的查询或者修改操作。这些操作需要在一个逻辑单元中执行，也就是需要保证操作的原子性。
+
+在实际书写中，需要在若干操作后面加一个 `COMMIT` 来表示提交上述操作，这些操作就被看作是原子的，如果发生中断就会 roll back。而在 SQL 实际过程中，会有默认的在每个操作后加上 `COMMIT`。如果需要自己定义两条或更多指令为原子，则需要 `SET AUTOCOMMIT=0`。
+
+!!! example
+    ```sql
+    SET AUTOCOMMIT=0
+    UPDATE account SET balance=balance-100 WHERE ano=‘1001’;
+    UPDATE account SETbalance=balance+100 WHERE ano=‘1002’;
+    COMMIT;
+    UPDATE account SET balance=balance -200 WHERE ano=‘1003’;
+    UPDATE account SET balance=balance+200 WHERE ano=‘1004’;
+    COMMIT;
+    UPDATE account SET balance=balance+balance*2.5%;
+    COMMIT;
+    ```
+
+??? note "原子操作另一种实现方式"
+    ```sql
+    begin atomic 
+    ......
+    end 
+    ```
+
+## Joined Relations
+
+和之前在关系代数中讲到的一样，连接就涉及到两个关系，那么其中就涉及到两个关键概念：**连接条件和连接类型**。连接条件指的是两个关系应该以怎样的方式连接，比如说是自然连接，还是按某几个属性相同进行连接等；连接类型则指的是那些未匹配的元组是否要留下。
+
+- 连接条件：可以直接用关键字 `natural` 表示自然连接，或者在后面加上 `on` 或者 `using`，后面会具体解释二者的区别和用法；
+- 连接类型：有 `inner join`，`left outer join`，`right outer join` 和 `full outer join`。
+
+先来看**连接类型**，事实上这与我们在关系代数中讲的外连接是相似的。关键字 `inner` 和 `outer` 都是可以省略的，如果是 `left join` 则代表左边关系中未匹配的需要留下，`right join` 则是右边关系中的留下，`full` 则代表两边都要，很好理解。
+
+然后我们分别介绍几种**连接条件**。
+
+1. 自然连接：其范式为 `R natural join S`，实际上就是之前讲的自然连接；
+2. `on` 条件连接：其范式为 `R join S on <predicate>`，则是自定义连接的条件，可以把它看成笛卡尔积之后的选择谓词；
+3. `using` 属性连接：其范式为 `R join S using (a1, <a2, ...>)`，实际上与自然连接相似，只不过指定了公共属性。
+
+在 SQL 语句中，连接用在 `FROM` 分句后面，可以方便地将两个关系连接起来做查询。
+
+!!! example
+    > Find all customers who have either an account or a loan (but not both) at the bank. 
+
+    ```sql
+    SELECT customer_name 
+    FROM (depositor natural full outer join borrower) 
+    WHERE account_number is null or loan_number is null 
+    ```
+
+??? note "主流商用数据库外连接表示"
+    - SQL server：`*=` 代表左连接，`=*` 代表右连接。
+    - ORACLE：在外连接侧加 `(+)`。
 
