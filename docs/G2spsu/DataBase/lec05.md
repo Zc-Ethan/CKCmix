@@ -79,7 +79,7 @@ ER 模型的想法就是任何的数据库我们都可以通过实体-关系的�
 
 比如 `person` 可以特殊化为 `customer` 和 `employee`。对于 `customer` 来说，我们可能关心信用评级；对于 `employee` 来说，我们可能关心工资。这些属性并不适用于所有 `person`，所以单独放在低层实体集中会更加自然。
 
-!!! note "图片占位"
+!!! example
     ![](./src/lec05_7.png)
 
 特殊化中一个很重要的概念是**属性继承**（Attribute Inheritance）。低层实体集会继承高层实体集的所有属性，也会继承高层实体集参与的联系。也就是说，如果 `employee ISA person`，那么 `employee` 不需要重新声明 `person-id, name, street, city` 等属性，它天然拥有这些属性。
@@ -105,7 +105,7 @@ ER 模型的想法就是任何的数据库我们都可以通过实体-关系的�
 - **Total**：完全泛化。每个高层实体都必须属于某个低层实体集；
 - **Partial**：部分泛化。高层实体可以不属于任何低层实体集。
 
-!!! note "图片占位"
+!!! example
     ![](./src/lec05_8.png)
 
 ### Aggregation
@@ -116,7 +116,7 @@ ER 模型的想法就是任何的数据库我们都可以通过实体-关系的�
 
 聚集的做法就是把 `works-on` 这个联系抽象成一个复合实体集，然后再让它和 `manager` 发生联系。这样既保留了原有的 `works-on`，又能描述“经理管理某个工作安排”这件事。
 
-!!! note "图片占位"
+!!! example
     ![](./src/lec05_9.png)
 
 ## Design of an E-R Database Schema
@@ -311,5 +311,5 @@ UML（Unified Modeling Language）也可以用来画类图，其类图和 ER 图
 
 不过二者的记号并不完全一样。比如 UML 中二元联系通常直接用一条线连接两个类，联系名写在线旁边；联系中的角色名也可以写在靠近对应类的一端。如果联系本身有属性，也可以把联系名和属性写在一个框里，再用虚线连接到表示联系的线。
 
-!!! note "图片占位"
+!!! example
     ![](./src/lec05_10.png)

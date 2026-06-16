@@ -44,7 +44,6 @@ theme:
 
 # 数学公式支持：从 MathJax 切换到 KaTeX
 extra_javascript:
-  - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 markdown_extensions:
@@ -128,3 +127,4 @@ nav:
       - G2spsu/DataBase/lec04.md
       - G2spsu/DataBase/lec05.md
       - G2spsu/DataBase/lec06.md
+      - G2spsu/DataBase/lec07.md
