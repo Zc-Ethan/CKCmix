@@ -22,8 +22,8 @@ title: lec07 Storage and File Structure
 
 从系统内部看，数据库大致可以分成查询处理器和存储管理器两部分。查询处理器负责解析、优化和执行查询；存储管理器则负责把这些操作落到物理数据上。
 
-!!! note "图片占位"
-    建议插入课件第 4 页或第 5 页：Database System Internals / MiniSQL Architecture，用来展示 Query Processor 与 Storage Manager 的关系。
+!!! example "Database System Internals"
+    ![](./src/lec07_01.png)
 
 ## Physical Storage Media
 
@@ -49,8 +49,8 @@ title: lec07 Storage and File Structure
 | Optical storage | 光盘 | 多用于归档 |
 | Tape storage | 磁带 | 顺序访问，主要用于备份和长期归档 |
 
-!!! note "图片占位"
-    建议插入课件第 14 页：Storage Hierarchy。该图很好地体现了速度、成本、容量和易失性之间的层次关系。
+!!! example "Storage Hierarchy"
+    ![](./src/lec07_02.png)
 
 ### Common Storage Media
 
@@ -82,8 +82,8 @@ title: lec07 Storage and File Structure
 - 每个盘面有一个磁头；
 - 多个盘面上相同编号的磁道组成一个柱面。
 
-!!! note "图片占位"
-    建议插入课件第 17 页：Magnetic Hard Disk Mechanism。该图用于说明 platter、track、sector、disk arm 和 read-write head。
+!!! example "Magnetic Hard Disk Mechanism"
+    ![](./src/lec07_03.png)
 
 磁盘控制器（Disk Controller）负责连接计算机系统和磁盘硬件。它接受读写扇区的高层命令，并完成移动磁臂、读写数据、校验 checksum、写后读回确认、坏扇区重映射等工作。
 
@@ -101,8 +101,8 @@ $$
 - **Rotational Latency**：目标扇区旋转到磁头下方的等待时间；
 - **Transfer Time**：真正传输数据的时间。
 
-!!! note "图片占位"
-    建议插入课件第 22 页：Performance Measures of Disks 中 seek time 和 rotational latency 的示意图。
+!!! example "Performance Measures of Disks"
+    ![](./src/lec07_04.png)
 
 在传统磁盘中，寻道时间和旋转等待往往是主要开销，而数据传输本身相对较快。课件中的例子指出，磁盘访问时间通常在毫秒级，而内存访问大约在纳秒级，二者可能相差约百万倍。
 
@@ -119,9 +119,6 @@ $$
 - 块太大：如果只用到其中一小部分，会浪费空间和带宽。
 
 为了减少磁臂移动，可以使用磁盘臂调度算法。典型方法是**电梯算法**（Elevator Algorithm）：磁臂沿一个方向移动并处理同方向请求，直到没有请求后再反向。
-
-!!! note "图片占位"
-    建议插入课件第 26 页：Elevator Algorithm 的磁道请求示意图。
 
 除此之外，还可以通过文件组织优化块访问，例如把相关数据放在同一柱面或相邻柱面上。但是文件随着插入和删除会逐渐碎片化，导致顺序访问也需要大量磁臂移动。
 
@@ -161,13 +158,7 @@ RAID（Redundant Arrays of Independent Disks）是用多个磁盘组成一个逻
 | RAID 5 | 分布式 parity | 避免 RAID 4 的单校验盘瓶颈 |
 | RAID 6 | 双重冗余 | 可容忍更多磁盘故障，但成本更高 |
 
-!!! note "图片占位"
-    建议插入课件第 34-39 页中的 RAID Levels 图，重点可以放 RAID 4、RAID 5 对比图，因为它们能直观看出 parity disk 和 distributed parity 的区别。
-
 实际选择 RAID 时要考虑成本、正常运行时性能、故障时性能、重建时间和可靠性。课件中给出的结论是：RAID 0 只适用于不重要数据；RAID 2/4 基本被 3/5 覆盖；RAID 3 由于 bit striping 的限制较少使用；实际应用中常常是在 RAID 1 和 RAID 5 之间选择。
-
-!!! tip "RAID 1 vs RAID 5"
-    RAID 1 写性能更好，适合高更新环境，比如数据库日志盘。RAID 5 存储成本较低，适合更新较少、数据量较大的场景。
 
 ## Tertiary Storage
 
@@ -183,8 +174,8 @@ RAID（Redundant Arrays of Independent Disks）是用多个磁盘组成一个逻
 
 由于磁盘访问非常慢，数据库系统会在主存中开辟一块区域作为**缓冲区**（buffer），用于保存磁盘块的副本。
 
-!!! note "图片占位"
-    建议插入课件第 47 页或第 48 页：Storage Access / Page Requests from Higher Levels，用来展示 disk block、buffer pool、frame 和 page request 的关系。
+!!! example "Page Requests from Higher Levels"
+    ![](./src/lec07_05.png)
 
 几个概念需要区分：
 
@@ -255,8 +246,8 @@ $$
 
 free list 的思想是在文件头保存第一个空闲记录地址，然后在空闲记录本身的位置存下一个空闲记录地址。这样可以复用被删除记录的空间。
 
-!!! note "图片占位"
-    建议插入课件第 55-56 页：Fixed-Length Records 删除策略和 Free Lists 图。
+!!! example "Free Lists"
+    ![](./src/lec07_06.png)
 
 ### Variable-Length Records
 
@@ -281,8 +272,8 @@ free list 的思想是在文件头保存第一个空闲记录地址，然后在�
 
 记录在页内可以移动，以保持连续存储并减少碎片；但记录对应的 slot 不变。索引或外部指针不直接指向记录本身，而是指向 slot entry，这是一种间接指针。
 
-!!! note "图片占位"
-    建议插入课件第 58 页：Slotted Page Structure。该图很关键，建议保留。
+!!! example "Slotted Page Structure"
+    ![](./src/lec07_07.png)
 
 ### Large Variable-Length Records
 
@@ -311,8 +302,8 @@ free list 的思想是在文件头保存第一个空闲记录地址，然后在�
 
 插入时需要找到合适位置。如果目标位置有空闲空间，就直接插入；否则可以插入 overflow block，并更新指针链。随着插入和删除增多，顺序文件会逐渐偏离原本顺序，因此需要定期重组。
 
-!!! note "图片占位"
-    建议插入课件第 64-65 页：Sequential File Organization 及其 insertion/deletion 图。
+!!! example "Sequential File Organization"
+    ![](./src/lec07_08.png)
 
 ### Multitable Clustering
 
@@ -320,8 +311,8 @@ free list 的思想是在文件头保存第一个空闲记录地址，然后在�
 
 它的优点是对连接查询很友好，特别是查询某个 department 及其 instructors 时。但如果只查询 department，自身记录反而会被其它关系的记录夹杂，可能增加读取成本。
 
-!!! note "图片占位"
-    建议插入课件第 66 页：Multitable Clustering File Organization。
+!!! example "Multitable Clustering File Organization"
+    ![](./src/lec07_09.png)
 
 ## Data Dictionary Storage
 
@@ -344,8 +335,8 @@ free list 的思想是在文件头保存第一个空闲记录地址，然后在�
 
 在磁盘上，系统 metadata 可以用关系形式存储；在内存中，为了高效访问，DBMS 可能会维护专门的数据结构。
 
-!!! note "图片占位"
-    建议插入课件第 70 页：Relational Representation of System Metadata。
+!!! example "Relational Representation of System Metadata"
+    ![](./src/lec07_10.png)
 
 ## Column-Oriented Storage
 
@@ -387,8 +378,8 @@ balance:        500, 400, ...
 
 因此，列式存储更适合决策支持、分析型查询和大数据场景；传统行存储更适合事务处理。现在一些系统同时支持行存储和列存储，称为 hybrid row/column stores。
 
-!!! note "图片占位"
-    建议插入课件第 72-74 页：Column-Oriented Storage / Columnar Representation / ORC file format。若只插一张，优先插 ORC 或 columnar representation 示意图。
+!!! example "Column-Oriented Storage"
+    ![](./src/lec07_11.png)
 
 ## Main-Memory Databases
 
