@@ -69,8 +69,8 @@ search-key value -> pointer
 
 如果一个 search-key 值对应多条记录，则索引项可以指向一个 bucket，bucket 中保存所有对应记录的指针。
 
-!!! note "图片占位"
-    建议插入课件第 9 页或第 10 页：Dense Index Files。第 10 页展示了按 `dept_name` 排序时的 dense index。
+!!! example "Dense Index Files"
+    ![](./src/lec08_01.png)
 
 稠密索引查找快，但空间开销和维护代价更大。插入、删除数据时，索引也需要同步更新。
 
@@ -88,8 +88,8 @@ search-key value -> pointer
 !!! warning
     Sparse index 只能用于按照 search key 顺序排列的数据文件；dense index 则可以用于顺序文件和非顺序文件。
 
-!!! note "图片占位"
-    建议插入课件第 11 页或第 12 页：Sparse Index Files，用来展示稀疏索引如何每块取一个索引项。
+!!! example "Sparse Index Files"
+    ![](./src/lec08_02.png)
 
 ### Secondary Index
 
@@ -101,8 +101,8 @@ search-key value -> pointer
 search-key value -> bucket -> record pointers
 ```
 
-!!! note "图片占位"
-    建议插入课件第 14 页：Secondary Index on balance field of account。该图展示了 balance 上的辅助索引和 bucket 结构。
+!!! example "Secondary Index on Balance"
+    ![](./src/lec08_03.png)
 
 ### Multilevel Index
 
@@ -114,9 +114,6 @@ search-key value -> bucket -> record pointers
 
 !!! example
     假设有 1,000,000 条记录，每块 10 条记录，则有 100,000 个数据块。若稀疏索引每块 100 个索引项，则索引文件有 1000 个块。对这 1000 个块做二分查找，大约需要 9 次块读取。多级索引的意义就是继续减少这些索引块访问。
-
-!!! note "图片占位"
-    建议插入课件第 16-17 页：Multilevel Index。第 17 页有 outer index、inner index 和 data records 的层次结构。
 
 ### Index Update
 
@@ -131,9 +128,6 @@ search-key value -> bucket -> record pointers
     对稠密索引，如果 search-key 原本不存在，就新增索引项；如果已存在，则增加指针或不变。
 
     对稀疏索引，如果插入导致产生新块，需要为新块插入索引项；如果新记录成为所在块最小 search-key，则更新该块的索引项。
-
-!!! note "图片占位"
-    建议插入课件第 19 页和第 22 页：Index Update Deletion / Insertion，对比 dense index 和 sparse index 的更新过程。
 
 ## B+-Tree Index Files
 
@@ -152,8 +146,8 @@ B+ 树索引是 indexed-sequential file 的一种重要替代。普通索引顺�
 - 如果根不是叶子，则至少有两个孩子；
 - 如果根本身是叶子，则可以有 $0$ 到 $n-1$ 个值。
 
-!!! note "图片占位"
-    建议插入课件第 28 页：Example of B+-Tree，作为 B+ 树整体结构示意。
+!!! example "Example of B+-Tree"
+    ![](./src/lec08_04.png)
 
 ### Node Structure
 
@@ -172,9 +166,6 @@ P1 K1 P2 K2 ... Pn-1 Kn-1 Pn
 - 通常一个节点对应一个磁盘块。
 
 在叶节点中，所有 search-key 都实际出现；而非叶节点构成对叶节点的多级稀疏索引。叶节点还通过最后一个指针按 search-key 顺序串起来，方便范围查询和顺序扫描。
-
-!!! note "图片占位"
-    建议插入课件第 30-33 页：B+-Tree Node Structure、Leaf Nodes、Non-Leaf Nodes 和 B+ tree example。若只选一张，优先第 33 页。
 
 ### Query on B+-Tree
 
@@ -221,9 +212,6 @@ B+ 树插入的基本过程：
 
 叶节点分裂时，把包含新插入项在内的 $n$ 个 `(key, pointer)` 按序排列，前 $\lceil n/2\rceil$ 个放原节点，剩余放新节点。
 
-!!! note "图片占位"
-    建议插入课件第 39-42 页：B+-Tree Insertion，特别是第 40 页插入 Adams 和第 41 页插入 Lamport 的例子。
-
 ### Deletion
 
 B+ 树删除的基本过程：
@@ -235,9 +223,6 @@ B+ 树删除的基本过程：
 5. 如果不能合并，则向兄弟节点借 entry 并重新分配；
 6. 必要时向上递归更新父节点；
 7. 如果根节点只剩一个孩子，则删除根，孩子成为新根。
-
-!!! note "图片占位"
-    建议插入课件第 45-47 页：B+-Tree Deletion，展示 merge、redistribute 和 root shrink 的情况。
 
 ## B-Tree Index Files
 
@@ -257,9 +242,6 @@ B 树和 B+ 树相似，但 B 树中 search-key 只出现一次，非叶节点�
 
 因此，数据库系统中通常更偏好 B+ 树。
 
-!!! note "图片占位"
-    建议插入课件第 57 页：B-tree 和 B+-tree on same data 的对比图。
-
 ## Static Hashing
 
 哈希文件组织通过哈希函数直接根据 search-key 找到 bucket。
@@ -273,9 +255,6 @@ $$
 将 search-key 映射到对应 bucket。
 
 Bucket 通常是一个磁盘块，里面可以存放一个或多个记录。由于不同 search-key 可能映射到同一个 bucket，因此 bucket 内仍然需要顺序查找。
-
-!!! note "图片占位"
-    建议插入课件第 61 页：Example of Hash File Organization。
 
 ### Hash Functions
 
@@ -301,8 +280,8 @@ overflow 无法完全避免，通常用 overflow bucket 处理。给定 bucket �
 
 严格来说，hash index 总是辅助索引。如果数据文件本身已经按同一个 search-key 做哈希组织，就不需要再额外建立相同 search-key 的主哈希索引。
 
-!!! note "图片占位"
-    建议插入课件第 66 页：Example of Hash Index。
+!!! example "Example of Hash Index"
+    ![](./src/lec08_05.png)
 
 ### Deficiencies of Static Hashing
 
@@ -337,8 +316,8 @@ overflow 无法完全避免，通常用 overflow bucket 处理。给定 bucket �
 3. 在 bucket address table 中找到 bucket 指针；
 4. 在 bucket 中查找记录。
 
-!!! note "图片占位"
-    建议插入课件第 70 页：General Extendable Hash Structure。
+!!! example "General Extendable Hash Structure"
+    ![](./src/lec08_06.png)
 
 插入时，如果目标 bucket 未满，直接插入。如果满了，则分裂 bucket：
 
@@ -349,9 +328,6 @@ overflow 无法完全避免，通常用 overflow bucket 处理。给定 bucket �
     说明当前 table 不够区分该 bucket。此时先把全局深度 $i$ 加 1，bucket address table 翻倍，再按上面的情况分裂 bucket。
 
 删除时，如果 bucket 为空，可以删除 bucket，并在可能时和 buddy bucket 合并。缩小 bucket address table 也可以做，但代价较高，通常只有 bucket 数远小于 table size 时才考虑。
-
-!!! note "图片占位"
-    建议插入课件第 74-78 页：Extendable Hashing 插入例子，尤其第 74 页初始结构和第 78 页插入后结构。
 
 ## Ordered Indexing vs Hashing
 
@@ -394,9 +370,6 @@ LSM Tree（Log Structured Merge Tree）的基本思想是：
 - 合并时数据可能被多次复制；
 - 删除需要用特殊 delete entry 表示。
 
-!!! note "图片占位"
-    建议插入课件第 82-84 页：LSM Tree。第 82 页展示 level 结构，第 84 页提到 deletion marker。
-
 LSM Tree 及其变体广泛用于写入密集型系统，比如 BigTable、Cassandra、LevelDB、MyRocks 等。
 
 ### Buffer Tree
@@ -413,8 +386,10 @@ Buffer Tree 是另一种写优化索引。它的核心想法是：在 B+ 树的�
 
 缺点是：相比 LSM Tree，Buffer Tree 会有更多随机 I/O。
 
-!!! note "图片占位"
-    建议插入课件第 87-92 页：Buffer Tree 插入例子。第 87 页展示基础结构，第 90-92 页展示 root buffer 满后 push down 的过程。
+??? example "Buffer Tree Insertion"
+    ![](./src/lec08_07_1.png)
+
+    ![](./src/lec08_07_2.png)
 
 ## Index Definition in SQL
 
@@ -505,8 +480,8 @@ Grid File 用于加速多个 search-key 上的一般查询。它为每个 search
 
 查找时，根据每个属性的值定位 grid 中的单元格，再跟随指针找到 bucket。
 
-!!! note "图片占位"
-    建议插入课件第 99 页：Example Grid File for account。
+!!! example "Example Grid File for Account"
+    ![](./src/lec08_08.png)
 
 Grid File 的问题是空间开销可能很高，而且如果刻度划分不好，会产生很多 overflow bucket。周期性重组可以改善分布，但代价也很高。
 
@@ -535,8 +510,8 @@ Bitmap index 的优点是：
 
 但它更适合低基数属性。如果一个属性几乎每条记录都不同，bitmap 数量会非常大，优势就会下降。
 
-!!! note "图片占位"
-    建议插入课件第 101-104 页：Bitmap Indices，特别是第 103 页的 AND/OR/NOT 位运算示例。
+!!! example "Bitmap Indices"
+    ![](./src/lec08_09.png)
 
 ## Summary
 
