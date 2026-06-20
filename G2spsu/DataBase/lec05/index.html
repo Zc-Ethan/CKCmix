@@ -1,0 +1,1885 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="ZCETHAN">
+      
+      
+        <link rel="canonical" href="https://zc-ethan.github.io/CKCmix/G2spsu/DataBase/lec05/">
+      
+      
+        <link rel="prev" href="../lec04/">
+      
+      
+        <link rel="next" href="../lec06/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>lec05 Entity-Relationship Model - ZCETHAN's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="light-green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#entity-sets" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="ZCETHAN&#39;s Blog" class="md-header__button md-logo" aria-label="ZCETHAN's Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 16.61v-1.24l6-3.46V7.23l-5 2.89-5-2.89V13l-1 .58L2 13V5l1.07-.62L9 7.81l3.93-2.27 2-1.16L16 5v8.06L10.92 16l4.05 2.33 5.03-2.9V11l1-.58 1 .58v5.58l-7.03 4.06zm14-6.86-1 .58-1-.58V8.58L21 8l1 .58z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ZCETHAN's Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              lec05 Entity-Relationship Model
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="light-green"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="brown" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Zc-Ethan/CKCmix" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Zc-Ethan/CKCmix
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  个人主页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../eat_in_zju/ZJGcampus/" class="md-tabs__link">
+          
+  
+  
+  食在浙大
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../G1auwi/lessonsummary/" class="md-tabs__link">
+          
+  
+  
+  大一秋冬
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../G1spsu/gen_chem_exp/" class="md-tabs__link">
+          
+  
+  
+  大一春夏
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../G2auwi/" class="md-tabs__link">
+          
+  
+  
+  大二秋冬
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../lec02/" class="md-tabs__link">
+          
+  
+  
+  大二春夏
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="ZCETHAN&#39;s Blog" class="md-nav__button md-logo" aria-label="ZCETHAN's Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 16.61v-1.24l6-3.46V7.23l-5 2.89-5-2.89V13l-1 .58L2 13V5l1.07-.62L9 7.81l3.93-2.27 2-1.16L16 5v8.06L10.92 16l4.05 2.33 5.03-2.9V11l1-.58 1 .58v5.58l-7.03 4.06zm14-6.86-1 .58-1-.58V8.58L21 8l1 .58z"/></svg>
+
+    </a>
+    ZCETHAN's Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Zc-Ethan/CKCmix" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Zc-Ethan/CKCmix
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    个人主页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../eat_in_zju/ZJGcampus/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    食在浙大
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../G1auwi/lessonsummary/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大一秋冬
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../G1spsu/gen_chem_exp/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大一春夏
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../G2auwi/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大二秋冬
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大二春夏
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    大二春夏
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6_1" id="__nav_6_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据库系统
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    数据库系统
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec02 Relational Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec03 SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec04 Advanced SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec05 Entity-Relationship Model
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec05 Entity-Relationship Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#entity-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entity Sets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relationship-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relationship Sets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keys
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#e-r-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E-R Diagram
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#weak-entity-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Weak Entity Sets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extended-e-r-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extended E-R Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Extended E-R Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#specialization-and-generalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Specialization and Generalization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constraints-on-specialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constraints on Specialization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aggregation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aggregation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-of-an-e-r-database-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design of an E-R Database Schema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Design of an E-R Database Schema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#e-r-design-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E-R Design Decisions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reduction-of-an-e-r-schema-to-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reduction of an E-R Schema to Tables
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reduction of an E-R Schema to Tables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entity-sets-to-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entity Sets to Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#weak-entity-sets-to-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Weak Entity Sets to Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relationship-sets-to-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relationship Sets to Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#redundancy-of-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Redundancy of Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specialization-to-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Specialization to Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#banking-database-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Banking Database Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UML
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec06 Relational Database Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec07 Storage and File Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec08 Indexing and Hashing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec09 Query Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec10 Query Optimization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec11 Transactions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#entity-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entity Sets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relationship-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relationship Sets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keys
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#e-r-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E-R Diagram
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#weak-entity-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Weak Entity Sets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extended-e-r-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extended E-R Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Extended E-R Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#specialization-and-generalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Specialization and Generalization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constraints-on-specialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constraints on Specialization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aggregation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aggregation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-of-an-e-r-database-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design of an E-R Database Schema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Design of an E-R Database Schema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#e-r-design-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E-R Design Decisions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reduction-of-an-e-r-schema-to-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reduction of an E-R Schema to Tables
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reduction of an E-R Schema to Tables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entity-sets-to-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entity Sets to Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#weak-entity-sets-to-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Weak Entity Sets to Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relationship-sets-to-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relationship Sets to Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#redundancy-of-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Redundancy of Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specialization-to-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Specialization to Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#banking-database-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Banking Database Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UML
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>lec05 Entity-Relationship Model</h1>
+
+<p>ER 模型的想法就是任何的数据库我们都可以通过实体-关系的方式来描述。因此我们会先介绍实体集和关系集，然后介绍如何构建一个 ER 图来表现一个 ER 模型。</p>
+<h2 id="entity-sets">Entity Sets<a class="headerlink" href="#entity-sets" title="Permanent link">&para;</a></h2>
+<p><strong>实体</strong>（Entity）指实际存在的客观对象，可以与其它对象相区分。可以是具体的也可以是抽象的。每个实体都会有一些属性，比如人是一个实体，对于人来说，ta 的名字、身高等就是ta 的属性。实体集就是包含同一类实体的集合。</p>
+<p>我们在之前关系中也讲到过属性。属性有几种分类方式：</p>
+<ul>
+<li>简单和复合属性：比如性别是简单属性，而地址、名字等可以进一步拆分的就是复合属性；</li>
+<li>单值和多值属性：比如所有电话号码就是多值属性；</li>
+<li>派生属性与基属性：派生属性可以由其它属性组合得到，比如年龄，可以通过出生日期计算得到。</li>
+</ul>
+<h2 id="relationship-sets">Relationship Sets<a class="headerlink" href="#relationship-sets" title="Permanent link">&para;</a></h2>
+<p>关系描述的是两个或多个实体之间的关联。关系集是多个同一类型关系的集合。</p>
+<p>关系集的<strong>度</strong>（degree）代表的是该关系集所联系的实体集的个数。大部分情况下，我们只考虑度为 2 的关系集，度大于 2 的关系集比较少见。</p>
+<p><strong>映射基数</strong>（Mapping Cardinalities）代表的是一个联系集中，一个实体可以与另一类实体相联系的实体数目。其中数目是指最多一个还是多个。</p>
+<h2 id="keys">Keys<a class="headerlink" href="#keys" title="Permanent link">&para;</a></h2>
+<p>关于键的概念我们在前几章已经提到过，包括超键、候选键以及主键，这些概念在这里同样使用。那么这些是实体集的键的概念。下面我们谈论的是关系集中键的概念：</p>
+<ol>
+<li>参与该关系集的各个实体集的主键的组合，就组成了该关系集的一个超码；</li>
+<li>在确定候选码的时候，必须要考虑到映射基数；</li>
+<li>在选择码的时候，要注意码的属性不能为空，值不应常变。</li>
+</ol>
+<h2 id="e-r-diagram">E-R Diagram<a class="headerlink" href="#e-r-diagram" title="Permanent link">&para;</a></h2>
+<p>矩形代表实体集，菱形代表关系集，用线来连接关系集和实体集。在以前的版本中，用椭圆连接实体集代表其属性，在现在我们可以直接把属性写在实体集的矩形内，后面会详细讲到。</p>
+<div class="admonition example">
+<p class="admonition-title">E-R 图</p>
+<p><img alt="" src="../src/lec05_1.png" /></p>
+</div>
+<p>当然，关系集联系的实体集不一定要是不同的，可以有<strong>自环联系集</strong>（Recursive relationship set）。</p>
+<p><strong>Cardinality Constraints</strong>：我们用是否带箭头的线来表示对单还是对多。如图，带有箭头一面的实体集是一，不带的是多，代表着一对多。</p>
+<p><img alt="" src="../src/lec05_2.png" /></p>
+<p><strong>Participation</strong>：分为全参与和部分参与。全参与是说实体集中每个实体都在该关系中，部分参与则是存在一些实体不在关系中。对于全参与，我们可以用两条实线来描述。</p>
+<p><img alt="" src="../src/lec05_3.png" /></p>
+<p><strong>Alternative Notation</strong>：除了上述两种方式以外，我们还有更普适的方法。直接用数字来标注实体集参与关系个数的上下限。<code>*</code> 表示没有限制。</p>
+<p><img alt="" src="../src/lec05_4.png" /></p>
+<p><strong>Ternary Relationship</strong>：有的时候关系的度不一定为 2，用 ER 图也可以同理表示出来。但是在大部分情况下，我们其实可以把多元关系拆成二元的。</p>
+<p><img alt="" src="../src/lec05_5.png" /></p>
+<h2 id="weak-entity-sets">Weak Entity Sets<a class="headerlink" href="#weak-entity-sets" title="Permanent link">&para;</a></h2>
+<p>在实际中，我们会遇到一种实体集，它本身没有主键，使得它没法通过某几个属性来区别几个实体，但是如果处在联系集中，则可以通过另一个实体集来区分。这种实体集我们称之为<strong>弱实体集</strong>（Weak Entity Sets）。由于它没有主键，我们一般将那些用于区分的属性叫做<strong>分辨符</strong>（discriminator）或<strong>部分码</strong>（partial key）。</p>
+<p>弱实体集所依赖来区分各个实体的联系集称为其<strong>标识性联系</strong>（identifying relationship），对应的另一个实体集称为<strong>标识实体集</strong>（identifying entity）或<strong>属主实体集</strong>（owner entity set），那么该弱实体集的主键就由：标识实体集的主键加上自身的部分码构成。</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><img alt="" src="../src/lec05_6.png" /></p>
+</div>
+<p>在这里我们还需要注意一个点，标识实体集中的主键并不需要显式地标注在弱实体集中，因为这已经隐含在标识性联系中了。</p>
+<h2 id="extended-e-r-features">Extended E-R Features<a class="headerlink" href="#extended-e-r-features" title="Permanent link">&para;</a></h2>
+<p>在前面的 ER 图中，我们讨论的大多是实体集和联系集之间比较直接的联系。但是在实际建模时，还会遇到实体集内部有层次、关系本身还要继续参与关系等情况。为了描述这些问题，我们需要引入一些扩展的 ER 特性。</p>
+<h3 id="specialization-and-generalization">Specialization and Generalization<a class="headerlink" href="#specialization-and-generalization" title="Permanent link">&para;</a></h3>
+<p><strong>特殊化</strong>（Specialization）是一种自顶向下的设计过程。也就是说，我们先有一个比较泛的实体集，然后再根据其中某些实体的特殊属性或特殊联系，把它们划分成更低层的实体集。</p>
+<p>比如 <code>person</code> 可以特殊化为 <code>customer</code> 和 <code>employee</code>。对于 <code>customer</code> 来说，我们可能关心信用评级；对于 <code>employee</code> 来说，我们可能关心工资。这些属性并不适用于所有 <code>person</code>，所以单独放在低层实体集中会更加自然。</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><img alt="" src="../src/lec05_7.png" /></p>
+</div>
+<p>特殊化中一个很重要的概念是<strong>属性继承</strong>（Attribute Inheritance）。低层实体集会继承高层实体集的所有属性，也会继承高层实体集参与的联系。也就是说，如果 <code>employee ISA person</code>，那么 <code>employee</code> 不需要重新声明 <code>person-id, name, street, city</code> 等属性，它天然拥有这些属性。</p>
+<p><strong>泛化</strong>（Generalization）则是反过来的自底向上的设计过程。我们先发现多个实体集拥有共同的属性和联系，于是将这些共同部分抽象成一个更高层的实体集。比如 <code>customer</code> 和 <code>employee</code> 都可能有姓名、地址等属性，那么就可以把它们泛化成 <code>person</code>。</p>
+<p>从 ER 图的表示上看，特殊化和泛化本质上是同一个结构，只是设计思路相反。因此很多时候二者可以混用。</p>
+<h3 id="constraints-on-specialization">Constraints on Specialization<a class="headerlink" href="#constraints-on-specialization" title="Permanent link">&para;</a></h3>
+<p>在特殊化/泛化结构中，我们还需要描述一些约束条件。首先是<strong>低层实体集成员资格</strong>的来源：</p>
+<ul>
+<li>条件定义（Condition-defined）：某个实体是否属于低层实体集由条件决定。比如年龄超过 65 岁的 <code>person</code> 自动属于 <code>senior-citizen</code>；</li>
+<li>用户定义（User-defined）：成员资格不是由属性条件自动推出，而是由用户或应用程序指定。比如把 <code>employee</code> 分到不同的 team。</li>
+</ul>
+<p>其次是低层实体集之间是否可以重叠：</p>
+<ul>
+<li><strong>Disjoint</strong>：不相交。一个高层实体至多属于一个低层实体集。比如一个 <code>account</code> 要么是 <code>saving-account</code>，要么是 <code>checking-account</code>；</li>
+<li><strong>Overlapping</strong>：可重叠。一个高层实体可以同时属于多个低层实体集。比如一个 <code>person</code> 可以既是 <code>customer</code>，也是 <code>employee</code>。</li>
+</ul>
+<p>最后是<strong>完全性约束</strong>（Completeness Constraint），它描述高层实体是否必须属于至少一个低层实体集：</p>
+<ul>
+<li><strong>Total</strong>：完全泛化。每个高层实体都必须属于某个低层实体集；</li>
+<li><strong>Partial</strong>：部分泛化。高层实体可以不属于任何低层实体集。</li>
+</ul>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><img alt="" src="../src/lec05_8.png" /></p>
+</div>
+<h3 id="aggregation">Aggregation<a class="headerlink" href="#aggregation" title="Permanent link">&para;</a></h3>
+<p>聚集（Aggregation）用于处理“关系之间的关系”。这是因为在普通 ER 模型中，联系集只能连接实体集，不能直接连接另一个联系集。但是实际建模时，我们可能确实需要把某个联系当成一个整体，再让它和其它实体发生联系。</p>
+<p>比如我们有一个三元联系 <code>works-on(employee, job, branch)</code>，表示某个员工在某个支行承担某项工作。现在我们还想记录：对于某个具体的 <code>works-on</code> 工作安排，是否有一个经理负责管理它。此时如果直接再建一个联系，可能会重复描述 <code>employee, job, branch</code> 这组信息。</p>
+<p>聚集的做法就是把 <code>works-on</code> 这个联系抽象成一个复合实体集，然后再让它和 <code>manager</code> 发生联系。这样既保留了原有的 <code>works-on</code>，又能描述“经理管理某个工作安排”这件事。</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><img alt="" src="../src/lec05_9.png" /></p>
+</div>
+<h2 id="design-of-an-e-r-database-schema">Design of an E-R Database Schema<a class="headerlink" href="#design-of-an-e-r-database-schema" title="Permanent link">&para;</a></h2>
+<p>数据库设计一般可以分成几个层次：</p>
+<ol>
+<li>需求分析：明确需要存储什么数据、支持什么应用、需要哪些操作；</li>
+<li>概念结构设计：用 ER 模型等高层数据模型描述数据和约束；</li>
+<li>逻辑结构设计：把概念模型转化成数据库模式，也就是后面会讲到的表结构；</li>
+<li>模式优化：通过规范化等方式检查冗余和异常；</li>
+<li>物理结构设计：考虑索引、聚簇、查询优化等物理存储问题；</li>
+<li>数据库实施和安全设计：加载初始数据，测试系统，并为不同用户设置权限。</li>
+</ol>
+<p>在这里，ER 模型主要作用在概念结构设计阶段。它并不直接关心某个 DBMS 如何存储数据，而是先把现实世界中的对象、联系和约束表达清楚。</p>
+<h3 id="e-r-design-decisions">E-R Design Decisions<a class="headerlink" href="#e-r-design-decisions" title="Permanent link">&para;</a></h3>
+<p>ER 设计中最容易出问题的地方，并不是画图语法，而是同一个对象到底应该被建模成属性、实体集还是联系集。下面总结几个常见判断。</p>
+<p><strong>1. 属性还是实体集？</strong></p>
+<p>如果一个对象只是单值信息，并且我们只关心它的名字或取值，那么通常可以作为属性。比如性别一般可以作为 <code>student</code> 的属性。</p>
+<p>但是如果这个对象本身还有需要描述的属性，或者可能有多个值，那么就应该考虑建成实体集。比如电话不一定只是一个号码，它还可能有位置、类型、颜色等属性，此时可以建模为：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>employee(emp-id, emp-name, ...)
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>phone(phone-num, location, type, color)
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>emp-phone(emp-id, phone-num)
+</span></code></pre></div>
+<p>这样做的好处是不会把电话的相关信息硬塞进 <code>employee</code> 中，也可以自然地处理多个电话号码。</p>
+<p><strong>2. 实体集还是联系集？</strong></p>
+<p>如果我们要描述的是两个对象之间发生的动作或关联，那么更自然的方式是联系集。比如 <code>borrower</code> 描述客户和贷款之间的借款关系，<code>depositor</code> 描述客户和账户之间的存款关系。</p>
+<p>当然，这个判断还会受映射基数影响。比如贷款和支行之间如果是多对一关系，那么支行编号可能最终可以合并进 <code>loan</code> 表中。但在概念设计阶段，先把语义表达清楚通常更重要。</p>
+<p><strong>3. 属性属于实体还是联系？</strong></p>
+<p>有些属性不是单独属于某个实体，而是属于两个实体之间的联系。比如学生选课的成绩 <code>grade</code>，它既不是学生本身的属性，也不是课程本身的属性，而是学生和课程之间 <code>enrolled</code> 联系的属性。</p>
+<p>类似地，客户开户的 <code>access-date</code> 也更适合作为 <code>depositor</code> 联系的属性，因为它描述的是客户和账户之间的关系。</p>
+<p><strong>4. 多元联系还是多个二元联系？</strong></p>
+<p>并不是所有多元联系都可以无损地拆成多个二元联系。如果一个事实必须由三个或更多实体共同确定，那么使用三元或 n 元联系会更准确。只有在语义上能够独立拆分时，才应该改成多个二元联系。</p>
+<p><strong>5. 强实体集还是弱实体集？</strong></p>
+<p>如果某个对象必须依赖另一个实体才能被唯一标识，并且离开属主实体后就没有独立意义，那么它适合建成弱实体集。比如还款 <code>payment</code> 需要依赖对应的 <code>loan</code> 来标识。</p>
+<p>除此之外，特殊化/泛化可以提高设计的模块化；聚集可以把 ER 图的一部分包装成一个整体，使我们在更高层次上继续建模。</p>
+<h2 id="reduction-of-an-e-r-schema-to-tables">Reduction of an E-R Schema to Tables<a class="headerlink" href="#reduction-of-an-e-r-schema-to-tables" title="Permanent link">&para;</a></h2>
+<p>ER 图最终需要转化为关系数据库中的表。基本思想是：每个实体集和联系集都可以对应到一个表；表的属性来自实体集的属性、参与实体集的主键，以及联系集自身的描述性属性。</p>
+<h3 id="entity-sets-to-tables">Entity Sets to Tables<a class="headerlink" href="#entity-sets-to-tables" title="Permanent link">&para;</a></h3>
+<p>强实体集可以直接转化成同名的表，其属性就是实体集的属性。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>customer(customer-id, cust-name, cust-street, cust-city)
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>branch(branch-name, branch-city, assets)
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>account(account-number, balance)
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>loan(loan-number, amount)
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>employee(employee-id, employee-name, phone, start-date)
+</span></code></pre></div>
+<p>如果实体集中有复合属性，那么需要把复合属性展开成各个分量属性。比如 <code>name</code> 可以拆成 <code>first-name</code> 和 <code>last-name</code>：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>customer(customer-id, first-name, last-name, cust-street, cust-city)
+</span></code></pre></div>
+<p>如果实体集中有多值属性，则需要为该多值属性单独建立一个表。比如一个员工可能有多个 dependent name：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>employee(emp-id, ename, sex, age)
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>employee-dependent-names(emp-id, dependent-name)
+</span></code></pre></div>
+<p>其中多值属性的每一个取值都会对应新表中的一行。</p>
+<h3 id="weak-entity-sets-to-tables">Weak Entity Sets to Tables<a class="headerlink" href="#weak-entity-sets-to-tables" title="Permanent link">&para;</a></h3>
+<p>弱实体集转化成表时，需要包含其标识实体集的主键，再加上自己的部分码和其它属性。比如 <code>payment</code> 是依赖 <code>loan</code> 的弱实体集，那么可以得到：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>payment(loan-number, payment-number, payment-date, payment-amount)
+</span></code></pre></div>
+<p>这里 <code>loan-number</code> 来自标识实体集 <code>loan</code>，<code>payment-number</code> 是弱实体集自己的部分码。二者一起构成 <code>payment</code> 的主键。</p>
+<h3 id="relationship-sets-to-tables">Relationship Sets to Tables<a class="headerlink" href="#relationship-sets-to-tables" title="Permanent link">&para;</a></h3>
+<p>联系集转化为表时，通常需要放入参与实体集的主键，并把这些主键作为外键使用。如果联系集自己有描述性属性，也要加入表中。</p>
+<p>对于多对多联系，两个参与实体集的主键共同构成联系表的主键。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>borrower(customer-id, loan-number)
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>depositor(customer-id, account-number, access-date)
+</span></code></pre></div>
+<p>对于多对一或一对多联系，联系表中仍然可以放入两端实体集的主键。但此时在多端实体对应的属性通常可以作为联系表的主键。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>loan-branch(loan-number, branch-name)
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>account-branch(account-number, branch-name)
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>cust-banker(customer-id, employee-id, type)
+</span></code></pre></div>
+<p>对于一对一联系，可以选择任意一边扮演类似“多端”的角色，将另一边的主键加入其中。</p>
+<h3 id="redundancy-of-tables">Redundancy of Tables<a class="headerlink" href="#redundancy-of-tables" title="Permanent link">&para;</a></h3>
+<p>上面的转换规则是通用的，但直接转换有时会产生冗余表。最典型的是一对多联系。如果多端是全参与，那么可以把一端的主键直接加入多端实体表中，而不必单独保留联系表。</p>
+<p>比如：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>account(account-number, balance)
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>branch(branch-name, branch-city, assets)
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>account-branch(account-number, branch-name)
+</span></code></pre></div>
+<p>可以合并为：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>account(account-number, branch-name, balance)
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>branch(branch-name, branch-city, assets)
+</span></code></pre></div>
+<p>但是如果多端只是部分参与，直接合并可能引入大量 null 值。比如有些客户没有 banker，那么把 <code>banker-id</code> 和 <code>type</code> 直接放入 <code>customer</code> 表中，就会导致这些客户对应的字段为空。因此是否合并要看参与约束和实际数据情况。</p>
+<p>另一个冗余来自弱实体集的标识性联系。由于弱实体集转化成表时已经包含了标识实体集的主键，所以标识性联系对应的表通常是多余的。比如：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>payment(loan-number, payment-number, payment-date, payment-amount)
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>loan-payment(loan-number, payment-number)
+</span></code></pre></div>
+<p>其中 <code>loan-payment</code> 的信息已经完全包含在 <code>payment</code> 表中，因此可以省略。</p>
+<h3 id="specialization-to-tables">Specialization to Tables<a class="headerlink" href="#specialization-to-tables" title="Permanent link">&para;</a></h3>
+<p>特殊化/泛化结构转表时有两种常见方法。</p>
+<p>第一种方法是为高层实体集建表，也为每个低层实体集建表。低层实体表中包含高层实体的主键和自己的局部属性。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>person(person-id, name, street, city)
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>customer(person-id, credit-rating)
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>employee(person-id, salary)
+</span></code></pre></div>
+<p>这种方法冗余较少，但如果要查询一个员工的完整信息，就需要同时访问 <code>person</code> 和 <code>employee</code> 两张表。</p>
+<p>第二种方法是为每个实体集都建立包含全部属性的表。低层实体表不仅包含自己的局部属性，也包含继承来的属性。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>person(person-id, name, street, city)
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>customer(person-id, name, street, city, credit-rating)
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>employee(person-id, name, street, city, salary)
+</span></code></pre></div>
+<p>如果特殊化是 total 的，那么高层实体表甚至可以不实际存储，而是作为低层实体表并集得到的视图。但是这种方法可能产生冗余，比如同一个人既是客户又是员工时，姓名和地址会被存两次。</p>
+<h3 id="banking-database-example">Banking Database Example<a class="headerlink" href="#banking-database-example" title="Permanent link">&para;</a></h3>
+<p>把前面银行数据库的 ER 图转成表，可以得到一个比较典型的结果：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>branch(branch-name, branch-city, assets)
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>customer(customer-name, customer-street, customer-city, banker-id)
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>account(account-number, branch-name, balance)
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>loan(loan-number, branch-name, amount)
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>depositor(customer-name, account-number)
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>borrower(customer-name, loan-number)
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>employee(employee-id, employee-name, phone, start-date, manager)
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>payment(loan-number, payment-number, payment-date, payment-amount)
+</span></code></pre></div>
+<p>这里可以看到，一些一对多联系已经被合并进了多端实体表中，比如 <code>account</code> 中有 <code>branch-name</code>，<code>loan</code> 中也有 <code>branch-name</code>。而 <code>payment</code> 作为弱实体集，其表中直接包含了 <code>loan-number</code>。</p>
+<h2 id="uml">UML<a class="headerlink" href="#uml" title="Permanent link">&para;</a></h2>
+<p>UML（Unified Modeling Language）也可以用来画类图，其类图和 ER 图有一定对应关系。实体集大致对应类，联系集可以用类之间的连线表示，特殊化/泛化也可以用继承箭头表示。</p>
+<p>不过二者的记号并不完全一样。比如 UML 中二元联系通常直接用一条线连接两个类，联系名写在线旁边；联系中的角色名也可以写在靠近对应类的一端。如果联系本身有属性，也可以把联系名和属性写在一个框里，再用虚线连接到表示联系的线。</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><img alt="" src="../src/lec05_10.png" /></p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="页脚" >
+        
+          
+          <a href="../lec04/" class="md-footer__link md-footer__link--prev" aria-label="上一页: lec04 Advanced SQL">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                lec04 Advanced SQL
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../lec06/" class="md-footer__link md-footer__link--next" aria-label="下一页: lec06 Relational Database Design">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              <div class="md-ellipsis">
+                lec06 Relational Database Design
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["toc.follow", "navigation.tabs", "navigation.prune", "navigation.top", "navigation.footer", "content.tooltips", "content.code.select", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1907 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="ZCETHAN">
+      
+      
+        <link rel="canonical" href="https://zc-ethan.github.io/CKCmix/G2spsu/DataBase/lec04/">
+      
+      
+        <link rel="prev" href="../lec03/">
+      
+      
+        <link rel="next" href="../lec05/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>lec04 Advanced SQL - ZCETHAN's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="light-green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sql-data-types-and-schemas" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="ZCETHAN&#39;s Blog" class="md-header__button md-logo" aria-label="ZCETHAN's Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 16.61v-1.24l6-3.46V7.23l-5 2.89-5-2.89V13l-1 .58L2 13V5l1.07-.62L9 7.81l3.93-2.27 2-1.16L16 5v8.06L10.92 16l4.05 2.33 5.03-2.9V11l1-.58 1 .58v5.58l-7.03 4.06zm14-6.86-1 .58-1-.58V8.58L21 8l1 .58z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ZCETHAN's Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              lec04 Advanced SQL
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="light-green"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="brown" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Zc-Ethan/CKCmix" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Zc-Ethan/CKCmix
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  个人主页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../eat_in_zju/ZJGcampus/" class="md-tabs__link">
+          
+  
+  
+  食在浙大
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../G1auwi/lessonsummary/" class="md-tabs__link">
+          
+  
+  
+  大一秋冬
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../G1spsu/gen_chem_exp/" class="md-tabs__link">
+          
+  
+  
+  大一春夏
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../G2auwi/" class="md-tabs__link">
+          
+  
+  
+  大二秋冬
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../lec02/" class="md-tabs__link">
+          
+  
+  
+  大二春夏
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="ZCETHAN&#39;s Blog" class="md-nav__button md-logo" aria-label="ZCETHAN's Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 16.61v-1.24l6-3.46V7.23l-5 2.89-5-2.89V13l-1 .58L2 13V5l1.07-.62L9 7.81l3.93-2.27 2-1.16L16 5v8.06L10.92 16l4.05 2.33 5.03-2.9V11l1-.58 1 .58v5.58l-7.03 4.06zm14-6.86-1 .58-1-.58V8.58L21 8l1 .58z"/></svg>
+
+    </a>
+    ZCETHAN's Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Zc-Ethan/CKCmix" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Zc-Ethan/CKCmix
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    个人主页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../eat_in_zju/ZJGcampus/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    食在浙大
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../G1auwi/lessonsummary/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大一秋冬
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../G1spsu/gen_chem_exp/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大一春夏
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../G2auwi/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大二秋冬
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大二春夏
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    大二春夏
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6_1" id="__nav_6_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据库系统
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    数据库系统
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec02 Relational Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec03 SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec04 Advanced SQL
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec04 Advanced SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sql-data-types-and-schemas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SQL Data Types and Schemas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integrity-constraints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integrity Constraints
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integrity Constraints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#domain-constraints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Domain Constraints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#referential-integrity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referential Integrity
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Referential Integrity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cascading-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cascading Actions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assertions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assertions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Triggers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authorization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#embedded-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Embedded SQL
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Embedded SQL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Updates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic SQL
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#odbc-and-jdbc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ODBC and JDBC
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec05 Entity-Relationship Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec06 Relational Database Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec07 Storage and File Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec08 Indexing and Hashing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec09 Query Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec10 Query Optimization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec11 Transactions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sql-data-types-and-schemas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SQL Data Types and Schemas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integrity-constraints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integrity Constraints
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integrity Constraints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#domain-constraints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Domain Constraints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#referential-integrity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referential Integrity
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Referential Integrity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cascading-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cascading Actions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assertions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assertions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Triggers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authorization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#embedded-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Embedded SQL
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Embedded SQL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Updates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic SQL
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#odbc-and-jdbc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ODBC and JDBC
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>lec04 Advanced SQL</h1>
+
+<h2 id="sql-data-types-and-schemas">SQL Data Types and Schemas<a class="headerlink" href="#sql-data-types-and-schemas" title="Permanent link">&para;</a></h2>
+<p>我们在 SQL 中会使用各种各样类型的数据，有的时候，我们还可以自己定义数据类型，比如：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">Create</span><span class="w"> </span><span class="k">type</span><span class="w"> </span><span class="n">person_name</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nb">varchar</span><span class="w"> </span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</span></code></pre></div>
+<p>这样在之后就可以：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">Create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">student</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">(</span><span class="n">sno</span><span class="w"> </span><span class="nb">char</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w"> </span><span class="n">sname</span><span class="w"> </span><span class="n">person_name</span><span class="p">,</span><span class="w"> </span><span class="n">ssex</span><span class="w"> </span><span class="nb">char</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">birthday</span><span class="w"> </span><span class="nb">date</span><span class="p">)</span><span class="w"> </span>
+</span></code></pre></div>
+<p>那么在 type 之外，我们还可以自定义域（domain），域的意义是可以加上约束条件。如：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">Create</span><span class="w"> </span><span class="k">domain</span><span class="w"> </span><span class="n">Dollars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nb">numeric</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">Create</span><span class="w"> </span><span class="k">domain</span><span class="w"> </span><span class="n">Pounds</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nb">numeric</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span><span class="w"> </span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="k">Create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">        </span><span class="p">(</span><span class="n">eno</span><span class="w"> </span><span class="nb">char</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w"> </span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">        </span><span class="n">ename</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">15</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">        </span><span class="n">job</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">        </span><span class="n">salary</span><span class="w"> </span><span class="n">Dollars</span><span class="p">,</span><span class="w"> </span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">        </span><span class="n">commPounds</span><span class="p">);</span><span class="w"> </span>
+</span></code></pre></div>
+<p>同时，我们也有可能需要向数据库里存储一些比较大的文件，比如说图片、视频等等。如果直接存储在数据库中会显得过于臃肿，因此我们定义一些特殊的类型来指向大型对象（Large Object），在我们做查询的时候，对于这些大型对象会返回<strong>指针</strong>而不是对象本身。</p>
+<ul>
+<li><strong>blob</strong>(binary large object)：指向一些由二进制进行编码的文件。</li>
+<li><strong>clob</strong>(character large object)：指向由字符进行编码的文件。</li>
+</ul>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">Create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">students</span><span class="w"> </span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="p">(</span><span class="n">sid</span><span class="w"> </span><span class="nb">char</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w"> </span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="n">gender</span><span class="w"> </span><span class="nb">char</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="n">photo</span><span class="w"> </span><span class="nb">blob</span><span class="p">(</span><span class="mi">20</span><span class="n">MB</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="n">cv</span><span class="w"> </span><span class="k">clob</span><span class="p">(</span><span class="mi">10</span><span class="n">KB</span><span class="p">))</span>
+</span></code></pre></div>
+</div>
+<p>从上面我们可以看出，整个数据库的存储逻辑是<strong>分层</strong>的，具体的分层方法可以参考下图：</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><img alt="" src="../src/lec04_1.png" /></p>
+</div>
+<h2 id="integrity-constraints">Integrity Constraints<a class="headerlink" href="#integrity-constraints" title="Permanent link">&para;</a></h2>
+<p>在<a href="../lec03/">上一章</a>中我们就已经介绍了部分完整性约束的内容。完整性约束是为了避免数据库在使用过程中遭遇了意外的损毁而对数据造成过大的影响。任何实例都必须遵循完整性约束，而完整性约束由数据库自动维护。</p>
+<p>先来回顾一下之前提到过的完整性约束：</p>
+<ul>
+<li>Not null: 约束一个属性不能为 null；</li>
+<li>Primary key: 指定一个属性为主键；</li>
+<li>Unique: 指定该属性不能重复；</li>
+<li>Check(P): 对 P 进行验真判断。</li>
+</ul>
+<details class="example">
+<summary>Example</summary>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">Create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">branch2</span><span class="w"> </span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="p">(</span><span class="n">branch_name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w"> </span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="n">branch_city</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="n">assets</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span><span class="w"> </span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="k">check</span><span class="w"> </span><span class="p">(</span><span class="n">assets</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">100</span><span class="p">))</span>
+</span></code></pre></div>
+</details>
+<h3 id="domain-constraints">Domain Constraints<a class="headerlink" href="#domain-constraints" title="Permanent link">&para;</a></h3>
+<p>在前文中我们提到域的定义，在定义域的时候我们说可以加上完整性约束。那么在这里我们指出，这个约束是可以被定义并命名的。我们使用关键字 <code>Constraint</code>，就可以定义一个完整性约束。比如：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">Create</span><span class="w"> </span><span class="k">domain</span><span class="w"> </span><span class="n">hourly</span><span class="o">-</span><span class="n">wage</span><span class="w"> </span><span class="nb">numeric</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">Constraint</span><span class="w"> </span><span class="n">value</span><span class="o">-</span><span class="n">test</span><span class="w"> </span><span class="k">check</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">.</span><span class="mi">00</span><span class="p">)</span>
+</span></code></pre></div>
+<p>就是定义了一个叫做 <code>value-test</code> 的完整性约束，并将其作用在 <code>hourly_wage</code> 字段。这样的好处是：如果报错，我们可以快速找到是与哪部分的完整性约束产生冲突；其次，如果我们想对约束进行更改也可以直接使用该名字来实现，而不用去查系统表；最后，这一操作还能提高可读性。</p>
+<p>当然，这都是可选项，我们也可以不对其进行定义命名：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">Create</span><span class="w"> </span><span class="k">domain</span><span class="w"> </span><span class="n">hourly</span><span class="o">-</span><span class="n">wage</span><span class="w"> </span><span class="nb">numeric</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">check</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">.</span><span class="mi">00</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="referential-integrity">Referential Integrity<a class="headerlink" href="#referential-integrity" title="Permanent link">&para;</a></h3>
+<p>参照完整性约束实际上就是我们之前讲过的外键约束。它的正式定义是这样的：</p>
+<blockquote>
+<p>对于两个关系 <span class="arithmatex">\(r_1\)</span> 和 <span class="arithmatex">\(r_2\)</span>，它们的主键分别是 <span class="arithmatex">\(K_1\)</span> 和 <span class="arithmatex">\(K_2\)</span>。如果 <span class="arithmatex">\(r_2\)</span> 中存在属性子集 <span class="arithmatex">\(\alpha\)</span>，满足对于 <span class="arithmatex">\(r_2\)</span> 中任何元组 <span class="arithmatex">\(t_2\)</span>，都在 <span class="arithmatex">\(r_1\)</span> 中能找到一个 <span class="arithmatex">\(t_1\)</span>，使得 <span class="arithmatex">\(t_1[K_1]=t_2[\alpha]\)</span>。</p>
+</blockquote>
+<p>这样的定义比较抽象，但是我们可以通俗地解释：参照关系（referencing relation）中的外键的值，如果不是 null，就必须在被参照关系（referenced relation）中实际存在。也就是说：</p>
+<div class="arithmatex">\[
+\Pi_{\alpha}(r_2)\subseteq \Pi_{K_1}(r_1)
+\]</div>
+<p>本质来说，我们就是申明了这样一个约束：在参照关系中，我们提到另一个被参照关系的主键，不能超出主键的值域。这是显然的，比如说我在参照关系中需要提到课程编号，那么被参照关系课程集合的所有课程编号就成了参照关系的值域。</p>
+<p>在该种约束下，对表格进行增删就需要一些前提条件。</p>
+<ul>
+<li>Insertion: 对于新插入的元组 <span class="arithmatex">\(t_2\)</span>，必须满足 <span class="arithmatex">\(t_2[\alpha]\in \Pi_K(r_1)\)</span>；如果是修改本质上和插入是一样的。</li>
+<li>Deletion: 对于要删除被参照关系中的元组 <span class="arithmatex">\(t_1\)</span>，则需计算 <span class="arithmatex">\(\sigma_{\alpha=t1[K]}(r_2)\)</span>，如果不为空，则要么拒绝此次删除，要么进行连锁删除（cascading deletions）。</li>
+</ul>
+<p>那么在 SQL 语句中，我们如何描述申明这种约束呢？首先我们之前用 <code>primary key</code> 来约定主键，用 <code>unique</code> 来约定候选键。那么我们可以用关键字 <code>foreign key</code> 来约定外键。首先我们需要列出该表格中的外键，然后加上 <code>references</code> 和被参照关系的名字，表示整个外键约束关系。</p>
+<p>在默认情况下，被参照关系中的主键会作为参照的属性。如果是其它的候选键，那么可以具体指定。</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">Create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">customer</span><span class="w"> </span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="p">(</span><span class="n">customer</span><span class="o">-</span><span class="n">name</span><span class="w">     </span><span class="nb">char</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="n">customer</span><span class="o">-</span><span class="n">street</span><span class="w">    </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="n">customer</span><span class="o">-</span><span class="n">city</span><span class="w">      </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">customer</span><span class="o">-</span><span class="n">name</span><span class="p">));</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="k">Create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">branch</span><span class="w"> </span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="p">(</span><span class="n">branch</span><span class="o">-</span><span class="n">name</span><span class="w">       </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">15</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="n">branch</span><span class="o">-</span><span class="n">city</span><span class="w">        </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">    </span><span class="n">assets</span><span class="w">             </span><span class="nb">integer</span><span class="p">,</span><span class="w"> </span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">branch</span><span class="o">-</span><span class="n">name</span><span class="p">));</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="k">Create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">account</span><span class="w"> </span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">    </span><span class="p">(</span><span class="n">account</span><span class="o">-</span><span class="nb">number</span><span class="w">    </span><span class="nb">char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">    </span><span class="n">branch</span><span class="o">-</span><span class="n">name</span><span class="w">        </span><span class="nb">char</span><span class="p">(</span><span class="mi">15</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">    </span><span class="n">balance</span><span class="w">            </span><span class="nb">integer</span><span class="p">,</span><span class="w"> </span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">    </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">account</span><span class="o">-</span><span class="nb">number</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">    </span><span class="k">foreign</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">branch</span><span class="o">-</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">references</span><span class="w"> </span><span class="n">branch</span><span class="p">);</span>
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="k">Create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">depositor</span><span class="w"> </span>
+</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">    </span><span class="p">(</span><span class="n">customer</span><span class="o">-</span><span class="n">name</span><span class="w">        </span><span class="nb">char</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="w">    </span><span class="n">account</span><span class="o">-</span><span class="nb">number</span><span class="w">        </span><span class="nb">char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a><span class="w">    </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">customer</span><span class="o">-</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">account</span><span class="o">-</span><span class="nb">number</span><span class="p">),</span><span class="w"> </span>
+</span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a><span class="w">    </span><span class="k">foreign</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">account</span><span class="o">-</span><span class="nb">number</span><span class="p">)</span><span class="w"> </span><span class="k">references</span><span class="w"> </span><span class="n">account</span><span class="p">,</span><span class="w"> </span>
+</span><span id="__span-7-25"><a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a><span class="w">    </span><span class="k">foreign</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">customer</span><span class="o">-</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">references</span><span class="w"> </span><span class="n">customer</span><span class="p">);</span>
+</span></code></pre></div>
+</div>
+<h4 id="cascading-actions">Cascading Actions<a class="headerlink" href="#cascading-actions" title="Permanent link">&para;</a></h4>
+<p>在前面我们提到过连锁操作，也就是说，如果两个表之间有参照关系，那么当对应的主键修改或删除后，为了保证完整性，我们可能拒绝该次操作，或者连锁地修改所有相关的值。那么当我们需要连锁修改的时候，可以用关键字 <code>Cascade</code> 来标注。我们将其称为级联操作（Cascading Actions），它的基本范式如下：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">Create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">account</span><span class="w"> </span><span class="p">(</span><span class="w"> </span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="p">...</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">foreign</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">branch</span><span class="o">-</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">references</span><span class="w"> </span><span class="n">branch</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">[</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="k">cascade</span><span class="p">]</span><span class="w"> </span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">[</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="k">update</span><span class="w"> </span><span class="k">cascade</span><span class="w"> </span><span class="p">]</span><span class="w"> </span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="p">...);</span>
+</span></code></pre></div>
+<p>具体地，如果我们删除了 branch 中的一个元组，其在 account 中有参照关系的元组也要同步删除。如果多个指定了删除级联的关系构成了一条链，那么在链的一端进行的删除会自动地传递下去。当然，这个过程中可能导致冲突，在冲突的时候，系统会丢出一个事务并终止，那么任何由此次删除引起的变化<strong>都将复原</strong>。</p>
+<p>当然，除此以外，我们也可以设定在对应主键删除后改为什么。如下：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">on</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="k">null</span><span class="w"> </span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">on</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="k">default</span>
+</span></code></pre></div>
+<p>分别表示外键设为 null 和默认值（一般为 0，可以设定）。因此我们会发现，如果外键被设定为 null 是不会触发完整性约束检查的。因此为了避免这样的问题出现，我们一般对外键会有 <code>not null</code> 的约束。</p>
+<p>同时，我们会关心另外一件事情，就是<strong>约束检查的时机</strong>。在默认情况下，是立即检查（NOT DEFERRABLE），也就是执行一条 SQL 语句之后就会对其进行完整性检查。当然，我们也可以选择延迟检查（DEFERRABLE），在这种情况下，提交（COMMIT）一次事务之后才会检查一次。</p>
+<details class="note">
+<summary>为什么需要延迟检查</summary>
+<p>在配偶关系：
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">marriedperson</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="n">spouse</span><span class="p">)</span>
+</span></code></pre></div>
+中，我们考虑插入一对配偶，那么每个人的 spouse 都有着指向该关系的外键约束。</p>
+<p>如果我们选择立即提交，则在插入其中一个人的时候会发现另一个人并没有在关系中，从而触发完整性约束的报错。如果选择延迟，则可以在两个人都插入后，再对关系进行检查，完美解决了这个问题。</p>
+</details>
+<h3 id="assertions">Assertions<a class="headerlink" href="#assertions" title="Permanent link">&para;</a></h3>
+<p>断言是一个谓词表达式，数据库中所有的关系都需要满足这个表达式。我们通常用它来处理一些复杂的约束条件。它有如下的形式：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">ASSERTION</span><span class="w"> </span><span class="o">&lt;</span><span class="k">assertion</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="k">CHECK</span><span class="w"> </span><span class="o">&lt;</span><span class="n">predicate</span><span class="o">&gt;</span><span class="p">;</span>
+</span></code></pre></div>
+<p>每当作出一个断言，系统就会检查所有可能违反断言的操作，如果发现违反则会直接报错。这一过程会有大量的开销，因此使用断言需要谨慎。</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<blockquote>
+<p>The sum of all loan amounts for each branch must be less than the sum of all account balances at the branch. </p>
+</blockquote>
+<p>由于 SQL 没有提供 forall 的写法，因此我们可以对两侧进行否定，写成不存在使得否 P 的形式。</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">ASSERTION</span><span class="w"> </span><span class="k">sum</span><span class="o">-</span><span class="k">constraint</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="p">(</span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">branch</span><span class="w"> </span><span class="n">B</span><span class="w"> </span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="k">where</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">sum</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">loan</span><span class="w"> </span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">        </span><span class="k">where</span><span class="w"> </span><span class="n">loan</span><span class="p">.</span><span class="n">branch</span><span class="o">-</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="n">branch</span><span class="o">-</span><span class="n">name</span><span class="p">)</span><span class="w"> </span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">        </span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">sum</span><span class="p">(</span><span class="n">balance</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">account</span><span class="w"> </span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">        </span><span class="k">where</span><span class="w"> </span><span class="n">account</span><span class="p">.</span><span class="n">branch</span><span class="o">-</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="n">branch</span><span class="o">-</span><span class="n">name</span><span class="p">)))</span><span class="w"> </span>
+</span></code></pre></div>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<blockquote>
+<p>Every loan has at least one borrower who maintains an account with a minimum balance of $1000.</p>
+</blockquote>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">ASSERTION</span><span class="w"> </span><span class="n">balance</span><span class="o">-</span><span class="k">constraint</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="p">(</span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">loan</span><span class="w"> </span><span class="n">L</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="k">where</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">                    </span><span class="k">For</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="n">loan</span><span class="o">-</span><span class="nb">number</span><span class="p">,</span><span class="w"> </span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">                    </span><span class="k">to</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">                    </span><span class="k">from</span><span class="w"> </span><span class="n">borrower</span><span class="w"> </span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">depositor</span><span class="w"> </span><span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">account</span><span class="w"> </span><span class="n">A</span><span class="w"> </span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">                    </span><span class="k">where</span><span class="w"> </span><span class="n">L</span><span class="p">.</span><span class="n">loan</span><span class="o">-</span><span class="nb">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="n">loan</span><span class="o">-</span><span class="nb">number</span><span class="w"> </span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">                    </span><span class="k">and</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="n">customer</span><span class="o">-</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D</span><span class="p">.</span><span class="n">customer</span><span class="o">-</span><span class="n">name</span><span class="w"> </span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">                    </span><span class="k">and</span><span class="w"> </span><span class="n">D</span><span class="p">.</span><span class="n">account</span><span class="o">-</span><span class="nb">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">account</span><span class="o">-</span><span class="nb">number</span><span class="w"> </span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">                    </span><span class="k">and</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">balance</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">1000</span><span class="p">)))</span><span class="w"> </span>
+</span></code></pre></div>
+</div>
+<h3 id="triggers">Triggers<a class="headerlink" href="#triggers" title="Permanent link">&para;</a></h3>
+<p>触发器就是在满足触发条件的时候，自动进行一些操作，作为本次操作的副效果。我们可以从以下这个例子开始。</p>
+<blockquote>
+<p>在银行存贷款数据库中，如果一个人的存款减到负数，我们希望能够自动地将其设定为零，并在贷款加入一条对应的数据来记录。</p>
+</blockquote>
+<p>那么在这种情况下，想要触发的条件，就是某一次修改会导致存款为负。所以：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">overdraft</span><span class="o">-</span><span class="k">trigger</span><span class="w"> </span><span class="k">after</span><span class="w"> </span><span class="k">update</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">account</span><span class="w"> </span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">referencing</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">nrow</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">row</span><span class="w"> </span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="k">when</span><span class="w"> </span><span class="n">nrow</span><span class="p">.</span><span class="n">balance</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span>
+</span></code></pre></div>
+<p>那么触发之后需要做什么呢？首先在贷款处保证插入了完整的数据内容，然后再将存款设定为 0。</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">begin</span><span class="w"> </span><span class="k">atomic</span><span class="w"> </span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">borrower</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">customer</span><span class="o">-</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">account</span><span class="o">-</span><span class="nb">number</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">depositor</span><span class="w"> </span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span><span class="k">where</span><span class="w"> </span><span class="n">nrow</span><span class="p">.</span><span class="n">account</span><span class="o">-</span><span class="nb">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">depositor</span><span class="p">.</span><span class="n">account</span><span class="o">-</span><span class="nb">number</span><span class="p">)</span><span class="w"> </span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">loan</span><span class="w"> </span><span class="k">values</span><span class="w"> </span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">    </span><span class="p">(</span><span class="n">nrow</span><span class="p">.</span><span class="n">account</span><span class="o">-</span><span class="nb">number</span><span class="p">,</span><span class="w"> </span><span class="n">nrow</span><span class="p">.</span><span class="n">branch</span><span class="o">-</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="err">–</span><span class="w"> </span><span class="n">nrow</span><span class="p">.</span><span class="n">balance</span><span class="p">)</span><span class="w"> </span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">    </span><span class="k">update</span><span class="w"> </span><span class="n">account</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">balance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">    </span><span class="k">where</span><span class="w"> </span><span class="n">account</span><span class="p">.</span><span class="n">account</span><span class="o">-</span><span class="nb">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nrow</span><span class="p">.</span><span class="n">account</span><span class="o">-</span><span class="nb">number</span><span class="w"> </span>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="k">end</span>
+</span></code></pre></div>
+<p>OK，在这里我们需要对上述的一些语法作出一些解释。</p>
+<ul>
+<li>触发器定义的第一行说明了触发的操作类型（update/delete/insert）、执行时间（before/after）、关注的表格（account）。在上方没有列出，我们可以只对某些属性进行监视，如 <code>after update of balance on account ...</code>。</li>
+<li>第二行的 referencing 表示我们需要的数据是修改前还是修改后，分别用 <code>old row</code> 和 <code>new row</code> 来表示。当然，如果是删除操作就没有 <code>new row</code>，同样如果是插入操作就没有 <code>old row</code>。</li>
+<li>我们还可以写 <code>referencing old/new table</code>，这样就是直接得到整个旧/新的表格，可以在 <code>when</code> 中使用 <code>select from where</code> 来进行更复杂的条件判断。</li>
+<li>同一行还有一个 <code>for each row</code> 表示每一行受到修改就进行一次触发，我们还可以写 <code>for each statement</code>，这样一个语句就只会触发一次。</li>
+</ul>
+<p>接下来我们从一个更实际的问题来看触发器的其他应用。假设我们在管理一家仓库，当库存低于警戒线时，需要增加订单来获取更多的库存。在这个问题中，我们希望触发器能够触发对外界的行为，但是数据库是不能直接进行外部行动的，所以我们需要定义一个内部的关系来记录订单，从而间接地影响外部。</p>
+<p>最后我们考虑触发器的局限性。在以前数据库的性能弱的时候，我们在维护汇总数据和做内容复制的时候，如果不使用数据库就得每次手动来检查更新。但是现在的数据库可以用物化视图等方式来实现，触发器隐性执行、难调试的缺点就显现出来。</p>
+<h2 id="authorization">Authorization<a class="headerlink" href="#authorization" title="Permanent link">&para;</a></h2>
+<p>权限管理的目的就是为了保证数据的安全，在此之前，我们需要对数据库的层次，以及每个层次可能导致的危险作出分析。</p>
+<ol>
+<li>数据库系统层：对用户权限进行管理，让每一种用户只访问到需要的数据；</li>
+<li>操作系统层：系统管理的权限很大，可以直接访问数据内容，因此必须做好该层的安全；</li>
+<li>网络层：需要防止窃听、伪装等网络攻击，使用加密等方法来进行数据传输；</li>
+<li>物理层：需要能够应对现实场景中的意外，如破坏设备、洪水、火灾等。可以使用门禁、备份等方式来应对；</li>
+<li>人为层：最弱的一层，需要加强用户审核、安全培训等来应对。</li>
+</ol>
+<p>那么在数据库中，我们可以通过视图来进行用户操作，而不是直接给用户提供原始的表。并且，我们还可以进一步地对视图进行权限管理，从而进一步提高数据库的安全性。</p>
+<p>比如说，如果银行职员想要看每个支行的客户名字，但是没有查看贷款的权限。此时我们可以创建视图：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">cust_loan</span><span class="w"> </span><span class="k">as</span><span class="w"> </span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">branchname</span><span class="p">,</span><span class="w"> </span><span class="n">customer_name</span><span class="w"> </span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="k">FROM</span><span class="w"> </span><span class="n">borrower</span><span class="p">,</span><span class="w"> </span><span class="n">loan</span><span class="w"> </span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="k">WHERE</span><span class="w"> </span><span class="n">borrower</span><span class="p">.</span><span class="n">loan_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loan</span><span class="p">.</span><span class="n">loan_number</span>
+</span></code></pre></div>
+<p>这样在需要查询的时候就可以：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="k">FROM</span><span class="w"> </span><span class="n">cust_loan</span>
+</span></code></pre></div>
+<p>后面我们会讨论授权相关的内容。DBA 是数据库系统中最高权限人，他可以将部分权限授予其它用户，这些用户也可以将自己的部分权限授予其它用户。当 DBA 或者某用户回收权限时，要确保下游的所有用户都不再拥有该权限。因此我们要保证权限授予的图不能有环。</p>
+<p>在 SQL 中，可以用如下方式来授予权限：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">GRANT</span><span class="o">&lt;</span><span class="n">privilege</span><span class="w"> </span><span class="n">list</span><span class="o">&gt;</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="o">&lt;</span><span class="k">table</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">view</span><span class="o">&gt;</span><span class="w"> </span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="k">TO</span><span class="w"> </span><span class="o">&lt;</span><span class="k">user</span><span class="w"> </span><span class="n">list</span><span class="o">&gt;</span><span class="w"> </span>
+</span></code></pre></div>
+<ul>
+<li>在这里，user list 可以是 user_id，可以是 public，也可以说明是一个 role（后面会解释）；</li>
+<li>授予一个视图的权限，并不代表授予组成视图的下层表的任何权限；</li>
+<li>权限授予者自身必须先拥有相关权限。</li>
+</ul>
+<p>同时，我们需要说明一下权限的范围：如 select,delete 等都是顾名思义的。权限 references 表示允许在创建的时候申明外键约束。权限 all (privileges) 表示授予所有权限。</p>
+<p>当然，能够继续向下授权本身也是一种权限，我们可以用 <code>with grant operation</code> 来描述这一权限。如：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">grant</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">branch</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">U1</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="k">grant</span><span class="w"> </span><span class="k">option</span><span class="p">;</span>
+</span></code></pre></div>
+<p>如果我们需要对多个用户授予相同的权限（这在现实场景中非常常见），那么可以使用角色（role）来简化。</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">Create</span><span class="w"> </span><span class="k">role</span><span class="w"> </span><span class="n">teller</span><span class="p">;</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="k">Create</span><span class="w"> </span><span class="k">role</span><span class="w"> </span><span class="n">manager</span><span class="p">;</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="k">Grant</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">branch</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">teller</span><span class="p">;</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="k">Grant</span><span class="w"> </span><span class="k">update</span><span class="w"> </span><span class="p">(</span><span class="n">balance</span><span class="p">)</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">account</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">teller</span><span class="p">;</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="k">Grant</span><span class="w"> </span><span class="k">all</span><span class="w"> </span><span class="k">privileges</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">account</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">manager</span><span class="p">;</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="k">Grant</span><span class="w"> </span><span class="n">teller</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">manager</span><span class="p">;</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="k">Grant</span><span class="w"> </span><span class="n">teller</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">alice</span><span class="p">,</span><span class="w"> </span><span class="n">bob</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="k">Grant</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">avi</span><span class="p">;</span>
+</span></code></pre></div>
+<p>对应的，我们也会有权限撤销，其范式如下：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="k">REVOKE</span><span class="w"> </span><span class="o">&lt;</span><span class="n">privilege</span><span class="w"> </span><span class="n">list</span><span class="o">&gt;</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="o">&lt;</span><span class="k">table</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">view</span><span class="o">&gt;</span><span class="w"> </span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="k">FROM</span><span class="o">&lt;</span><span class="k">user</span><span class="w"> </span><span class="n">list</span><span class="o">&gt;</span><span class="w"> </span><span class="p">[</span><span class="k">restrict</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">cascade</span><span class="p">]</span>
+</span></code></pre></div>
+<p>我们发现这里有级联的选项，这是因为你撤销一个权限可能导致后续的权限撤销，因此如果选择 cascade，那么将会级联的删除下去。那如果选择了 restrict，那么如果后续需要级联删除，就会拒绝本次撤销。</p>
+<p>这里，<code>&lt;privilege list&gt;</code> 可以是 ALL，可以移除所有目标可能有的权限。<code>&lt;user list&gt;</code> 可以是 public，那么除了那些被显示地赋予权限的用户，所有用户都被撤销相应的权限。如果一个用户的一个权限被两个以上的用户授予，那么经过一次撤销后他仍然可能拥有该权限。</p>
+<p>那么接下来我们将讲述一些 SQL 权限管理的<strong>缺陷</strong>。</p>
+<ol>
+<li><strong>SQL 不支持行级管理</strong>：比如说大学成绩记录表，每个同学应当只能查询他自己的成绩。但是在我们前面的权限管理中，我们只能限制某些用户查询某些列或者某些表，却无法限制他只查询某一行。</li>
+<li><strong>用户共享问题</strong>：在现在的 Web 服务器架构中，所有 app 用户都会共享同一个服务器用户，我们没法具体知道到底是谁在使用该用户。</li>
+</ol>
+<p>那么为了解决这些缺陷，我们想到<strong>落实到应用层</strong>来进行管理。我们用 C++ 等语言来实现应用层，就可以实现更细粒度（fine-grained）控制。但是这样也会带来一些问题，比如调试变得复杂，语句变得分散不方便集中维护。</p>
+<p>那么为了解决这个问题，我们又想到用审计日志（Audit Trails）的方式来记录谁在什么时候做了什么操作，日志可以用来查错、查违规等行为。如何实现日志呢？首先我们可以使用触发器（Trigger），在每次更新操作的时候写入日志。那么在现代的数据库中，Audit log 和 CDC 等内置可以直接完成。</p>
+<details class="note">
+<summary>Audit in Oracle</summary>
+<p><img alt="" src="../src/lec04_2.png" /></p>
+<p><img alt="" src="../src/lec04_3.png" /></p>
+</details>
+<h2 id="embedded-sql">Embedded SQL<a class="headerlink" href="#embedded-sql" title="Permanent link">&para;</a></h2>
+<p>事实上就是我们可以把 SQL 内嵌到高级语言中，下面以 C 语言为例解释。在 C 中，我们使用 <code>EXEC SQL&lt;embedded SQL statement&gt; END_EXEC</code> 来内嵌。宿主语言不同，格式完全不同。</p>
+<h3 id="query">Query<a class="headerlink" href="#query" title="Permanent link">&para;</a></h3>
+<p>在做单行查询的时候，我们可能会动态地需要从外部读入信息，这些变量需要在 <code>DECLARE SECTION</code> 中声明。如下：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="k">EXEC</span><span class="w"> </span><span class="n">SQLBEGIN</span><span class="w"> </span><span class="k">DECLARE</span><span class="w"> </span><span class="n">SECTION</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="nb">char</span><span class="w"> </span><span class="n">V_an</span><span class="p">[</span><span class="mi">20</span><span class="p">],</span><span class="w"> </span><span class="n">bn</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="nb">float</span><span class="w">  </span><span class="n">bal</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="k">EXEC</span><span class="w"> </span><span class="n">SQLEND</span><span class="w"> </span><span class="k">DECLARE</span><span class="w"> </span><span class="n">SECTION</span><span class="p">;</span><span class="w"> </span>
+</span></code></pre></div>
+<p>那么这些变量就可以用在后面的 SQL 内嵌语句中，用法是在变量名前面加上 <code>:</code>。</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="n">scanf</span><span class="p">(</span><span class="err">“</span><span class="o">%</span><span class="n">s</span><span class="err">”</span><span class="p">,</span><span class="w"> </span><span class="n">V_an</span><span class="p">);</span><span class="w">   </span><span class="o">//</span><span class="w"> </span><span class="err">读入账号</span><span class="p">,</span><span class="err">然后据此在下面的语句获得</span><span class="n">bn</span><span class="p">,</span><span class="w"> </span><span class="n">bal的值</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="k">EXEC</span><span class="w"> </span><span class="k">SQL</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">branch_name</span><span class="p">,</span><span class="w"> </span><span class="n">balance</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">:</span><span class="n">bn</span><span class="p">,</span><span class="w"> </span><span class="p">:</span><span class="n">bal</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="k">FROM</span><span class="w"> </span><span class="n">account</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">account_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">:</span><span class="n">V_an</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="n">END_EXEC</span>
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="n">printf</span><span class="p">(</span><span class="err">“</span><span class="o">%</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">s</span><span class="err">”</span><span class="p">,</span><span class="w"> </span><span class="n">V_an</span><span class="p">,</span><span class="w"> </span><span class="n">bn</span><span class="p">,</span><span class="w"> </span><span class="n">bal</span><span class="p">);</span><span class="w"> </span>
+</span></code></pre></div>
+<p>意思是把查询的结果写入变量 <code>bn</code> 和 <code>bal</code>。</p>
+<p>那么面对多行数据，我们会注意到我们无法直接写入到几个变量中，此时我们需要用到游标（cursor），可以类似地理解成 C 语言的指针，它可以一行一行地扫过去，并且每次将结果写入特定变量，从而实现了多行数据的读取。</p>
+<p>首先我们需要定义查询和游标：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="k">EXEC</span><span class="w"> </span><span class="k">SQL</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="k">DECLARE</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">CURSOR</span><span class="w"> </span><span class="k">FOR</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">customer_name</span><span class="p">,</span><span class="w"> </span><span class="n">customer_city</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="k">FROM</span><span class="w"> </span><span class="n">depositor</span><span class="w"> </span><span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">customer</span><span class="w"> </span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">account</span><span class="w"> </span><span class="n">A</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="k">WHERE</span><span class="w"> </span><span class="n">D</span><span class="p">.</span><span class="n">customer_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="n">customer_name</span>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">D</span><span class="p">.</span><span class="n">account_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">account_number</span>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">balance</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">:</span><span class="n">v_amount</span>
+</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="n">END_EXEC</span>
+</span></code></pre></div>
+<p>然后我们执行查询并将结果暂存，用游标指向第一条数据：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="k">EXEC</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">OPEN</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="n">END_EXEC</span>
+</span></code></pre></div>
+<p>然后每次取出数据写入宿主语言的变量中：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="k">EXEC</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">FETCH</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">:</span><span class="n">cn</span><span class="p">,</span><span class="w"> </span><span class="p">:</span><span class="n">ccity</span><span class="w"> </span><span class="n">END_EXEC</span>
+</span></code></pre></div>
+<p>当一个在 SQLCA 的名叫 <code>SQLSTATE</code> 的变量为 <code>02000</code> 时表明读到结尾了。随后我们关闭数据库游标即可。</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="k">EXEC</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">CLOSE</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="n">END_EXEC</span>
+</span></code></pre></div>
+<p>下面是个完整的例子：</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="k">Exec</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="n">include</span><span class="w"> </span><span class="n">SQLCA</span><span class="p">;</span><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="err">通讯区，是存放语句的执行状态的数据结构，其中有一个变量</span><span class="w"> </span><span class="k">sqlcode</span><span class="w"> </span><span class="err">指示每次执行</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="err">语句的返回代码（</span><span class="n">success</span><span class="p">,</span><span class="w"> </span><span class="n">not_success</span><span class="err">）。</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="k">Exec</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">BEGIN</span><span class="w"> </span><span class="k">DECLARE</span><span class="w"> </span><span class="n">SECTION</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="nb">char</span><span class="w"> </span><span class="n">bn</span><span class="p">[</span><span class="mi">20</span><span class="p">],</span><span class="w"> </span><span class="n">bc</span><span class="p">[</span><span class="mi">30</span><span class="p">];</span><span class="w"> </span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="k">Exec</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">END</span><span class="w"> </span><span class="k">DECLARE</span><span class="w"> </span><span class="n">SECTION</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="k">Exec</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">DECLARE</span><span class="w"> </span><span class="n">branch_cur</span><span class="w"> </span><span class="k">CURSOR</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span>
+</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="k">Select</span><span class="w"> </span><span class="n">branch_name</span><span class="p">,</span><span class="w"> </span><span class="n">branch_city</span><span class="w"> </span><span class="k">From</span><span class="w"> </span><span class="n">branch</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="p">...</span>
+</span><span id="__span-28-8"><a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="k">Exec</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">OPEN</span><span class="w"> </span><span class="n">branch_cur</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-28-9"><a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="n">While</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="err">{</span>
+</span><span id="__span-28-10"><a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="w">    </span><span class="k">Exec</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">FETCH</span><span class="w"> </span><span class="n">branch_cur</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">:</span><span class="n">bn</span><span class="p">,</span><span class="w"> </span><span class="p">:</span><span class="n">bc</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-28-11"><a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sqlca</span><span class="p">.</span><span class="k">sqlcode</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="n">BREAK</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-28-12"><a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a><span class="w">    </span><span class="p">...</span><span class="w">   </span><span class="o">//</span><span class="w"> </span><span class="err">由宿主语句对</span><span class="n">bn</span><span class="p">,</span><span class="w"> </span><span class="n">bc中的数据进行相关处理</span>
+</span><span id="__span-28-13"><a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a><span class="err">}</span><span class="w"> </span>
+</span><span id="__span-28-14"><a id="__codelineno-28-14" name="__codelineno-28-14" href="#__codelineno-28-14"></a><span class="k">Exec</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">CLOSE</span><span class="w"> </span><span class="n">branch_cur</span><span class="p">;</span><span class="w"> </span>
+</span></code></pre></div>
+<h3 id="updates">Updates<a class="headerlink" href="#updates" title="Permanent link">&para;</a></h3>
+<p>修改大体上与查询一样，涉及多行修改时，就可以使用游标，对当前游标进行修改用 <code>where CURRENT OF csr</code>。</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="k">Exec</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">BEGIN</span><span class="w"> </span><span class="k">DECLARE</span><span class="w"> </span><span class="n">SECTION</span><span class="p">;</span><span class="w">  </span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="nb">char</span><span class="w"> </span><span class="n">an</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span><span class="w"> </span>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="nb">float</span><span class="w"> </span><span class="n">bal</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="k">Exec</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">END</span><span class="w"> </span><span class="k">DECLARE</span><span class="w"> </span><span class="n">SECTION</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="k">EXEC</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">DECLARE</span><span class="w"> </span><span class="n">csr</span><span class="w"> </span><span class="k">CURSOR</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span>
+</span><span id="__span-29-6"><a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span>
+</span><span id="__span-29-7"><a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="k">FROM</span><span class="w"> </span><span class="n">account</span><span class="w"> </span>
+</span><span id="__span-29-8"><a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="k">WHERE</span><span class="w"> </span><span class="n">branch_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">‘</span><span class="n">Perryridge</span><span class="err">’</span><span class="w"> </span>
+</span><span id="__span-29-9"><a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a><span class="k">FOR</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="n">balance</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-29-10"><a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a><span class="k">EXEC</span><span class="w">  </span><span class="k">SQL</span><span class="w"> </span><span class="k">OPEN</span><span class="w"> </span><span class="n">csr</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-29-11"><a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a><span class="n">While</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"> </span>
+</span><span id="__span-29-12"><a id="__codelineno-29-12" name="__codelineno-29-12" href="#__codelineno-29-12"></a><span class="w">    </span><span class="k">EXEC</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">FETCH</span><span class="w"> </span><span class="n">csr</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">:</span><span class="n">an</span><span class="p">,</span><span class="w"> </span><span class="p">:</span><span class="n">bn</span><span class="p">,</span><span class="w"> </span><span class="p">:</span><span class="n">bal</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-29-13"><a id="__codelineno-29-13" name="__codelineno-29-13" href="#__codelineno-29-13"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sqlca</span><span class="p">.</span><span class="k">sqlcode</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="n">BREAK</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-29-14"><a id="__codelineno-29-14" name="__codelineno-29-14" href="#__codelineno-29-14"></a><span class="w">    </span><span class="p">...</span><span class="w">   </span><span class="o">//</span><span class="w"> </span><span class="err">由宿主语句对</span><span class="w"> </span><span class="n">an</span><span class="p">,</span><span class="w"> </span><span class="n">bn</span><span class="p">,</span><span class="w"> </span><span class="n">bal</span><span class="w"> </span><span class="err">中的数据进行相关处理</span><span class="p">(</span><span class="err">如打印</span><span class="p">)</span><span class="w"> </span>
+</span><span id="__span-29-15"><a id="__codelineno-29-15" name="__codelineno-29-15" href="#__codelineno-29-15"></a><span class="w">    </span><span class="k">EXEC</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">update</span><span class="w"> </span><span class="n">account</span><span class="w"> </span>
+</span><span id="__span-29-16"><a id="__codelineno-29-16" name="__codelineno-29-16" href="#__codelineno-29-16"></a><span class="w">    </span><span class="k">set</span><span class="w"> </span><span class="n">balance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">balance</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span>
+</span><span id="__span-29-17"><a id="__codelineno-29-17" name="__codelineno-29-17" href="#__codelineno-29-17"></a><span class="w">    </span><span class="k">where</span><span class="w"> </span><span class="k">CURRENT</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="n">csr</span><span class="p">;</span>
+</span><span id="__span-29-18"><a id="__codelineno-29-18" name="__codelineno-29-18" href="#__codelineno-29-18"></a><span class="err">}</span><span class="w"> </span>
+</span><span id="__span-29-19"><a id="__codelineno-29-19" name="__codelineno-29-19" href="#__codelineno-29-19"></a><span class="p">...</span><span class="w"> </span>
+</span><span id="__span-29-20"><a id="__codelineno-29-20" name="__codelineno-29-20" href="#__codelineno-29-20"></a><span class="k">EXEC</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">CLOSE</span><span class="w"> </span><span class="n">csr</span><span class="p">;</span>
+</span></code></pre></div>
+<h2 id="dynamic-sql">Dynamic SQL<a class="headerlink" href="#dynamic-sql" title="Permanent link">&para;</a></h2>
+<p>与嵌入式 SQL 类似，我们把 SQL 语句写成字符串，并用 <code>?</code> 进行占位。在要用到的时候使用 <code>using</code> 填入 <code>?</code> 处即可。</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="nb">char</span><span class="w"> </span><span class="o">*</span><span class="n">sqlprog</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;update account</span>
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="ss">                set balance = balance * 1.05 </span>
+</span><span id="__span-30-3"><a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="ss">                where account_number = ?&quot;</span>
+</span><span id="__span-30-4"><a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="k">EXEC</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="k">PREPARE</span><span class="w"> </span><span class="n">dynprog</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">:</span><span class="n">sqlprog</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-30-5"><a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="nb">char</span><span class="w"> </span><span class="n">v_account</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;A_101&quot;</span><span class="p">;</span><span class="w"> </span>
+</span></code></pre></div>
+<h2 id="odbc-and-jdbc">ODBC and JDBC<a class="headerlink" href="#odbc-and-jdbc" title="Permanent link">&para;</a></h2>
+<p>To be completed...</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="页脚" >
+        
+          
+          <a href="../lec03/" class="md-footer__link md-footer__link--prev" aria-label="上一页: lec03 SQL">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                lec03 SQL
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../lec05/" class="md-footer__link md-footer__link--next" aria-label="下一页: lec05 Entity-Relationship Model">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              <div class="md-ellipsis">
+                lec05 Entity-Relationship Model
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["toc.follow", "navigation.tabs", "navigation.prune", "navigation.top", "navigation.footer", "content.tooltips", "content.code.select", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

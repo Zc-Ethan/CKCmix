@@ -1,0 +1,2383 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="ZCETHAN">
+      
+      
+        <link rel="canonical" href="https://zc-ethan.github.io/CKCmix/G2spsu/DataBase/lec06/">
+      
+      
+        <link rel="prev" href="../lec05/">
+      
+      
+        <link rel="next" href="../lec07/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>lec06 Relational Database Design - ZCETHAN's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="light-green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#first-normal-form" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="ZCETHAN&#39;s Blog" class="md-header__button md-logo" aria-label="ZCETHAN's Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 16.61v-1.24l6-3.46V7.23l-5 2.89-5-2.89V13l-1 .58L2 13V5l1.07-.62L9 7.81l3.93-2.27 2-1.16L16 5v8.06L10.92 16l4.05 2.33 5.03-2.9V11l1-.58 1 .58v5.58l-7.03 4.06zm14-6.86-1 .58-1-.58V8.58L21 8l1 .58z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ZCETHAN's Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              lec06 Relational Database Design
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="light-green"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="brown" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Zc-Ethan/CKCmix" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Zc-Ethan/CKCmix
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  个人主页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../eat_in_zju/ZJGcampus/" class="md-tabs__link">
+          
+  
+  
+  食在浙大
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../G1auwi/lessonsummary/" class="md-tabs__link">
+          
+  
+  
+  大一秋冬
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../G1spsu/gen_chem_exp/" class="md-tabs__link">
+          
+  
+  
+  大一春夏
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../G2auwi/" class="md-tabs__link">
+          
+  
+  
+  大二秋冬
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../lec02/" class="md-tabs__link">
+          
+  
+  
+  大二春夏
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="ZCETHAN&#39;s Blog" class="md-nav__button md-logo" aria-label="ZCETHAN's Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 16.61v-1.24l6-3.46V7.23l-5 2.89-5-2.89V13l-1 .58L2 13V5l1.07-.62L9 7.81l3.93-2.27 2-1.16L16 5v8.06L10.92 16l4.05 2.33 5.03-2.9V11l1-.58 1 .58v5.58l-7.03 4.06zm14-6.86-1 .58-1-.58V8.58L21 8l1 .58z"/></svg>
+
+    </a>
+    ZCETHAN's Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Zc-Ethan/CKCmix" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Zc-Ethan/CKCmix
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    个人主页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../eat_in_zju/ZJGcampus/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    食在浙大
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../G1auwi/lessonsummary/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大一秋冬
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../G1spsu/gen_chem_exp/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大一春夏
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../G2auwi/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大二秋冬
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大二春夏
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    大二春夏
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6_1" id="__nav_6_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据库系统
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    数据库系统
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec02 Relational Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec03 SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec04 Advanced SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec05 Entity-Relationship Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec06 Relational Database Design
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec06 Relational Database Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#first-normal-form" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First Normal Form
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pitfalls-in-relational-database-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pitfalls in Relational Database Design
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functional-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functional Dependencies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Functional Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trivial-dependency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trivial Dependency
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#closure-of-functional-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Closure of Functional Dependencies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Closure of Functional Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#armstrongs-axioms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Armstrong's Axioms
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#closure-of-attribute-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Closure of Attribute Sets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#canonical-cover" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Canonical Cover
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Canonical Cover">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extraneous-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extraneous Attributes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decomposition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decomposition
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Decomposition">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lossless-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lossless Join
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependency-preservation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency Preservation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#boyce-codd-normal-form" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boyce-Codd Normal Form
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Boyce-Codd Normal Form">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bcnf-decomposition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BCNF Decomposition
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#third-normal-form" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Third Normal Form
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Third Normal Form">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3nf-decomposition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3NF Decomposition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bcnf-vs-3nf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BCNF vs 3NF
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multivalued-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multivalued Dependencies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Multivalued Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition-of-mvd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition of MVD
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fourth-normal-form" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fourth Normal Form
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#overall-design-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overall Design Process
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overall Design Process">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#denormalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Denormalization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-design-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other Design Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec07 Storage and File Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec08 Indexing and Hashing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec09 Query Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec10 Query Optimization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lec11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec11 Transactions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#first-normal-form" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First Normal Form
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pitfalls-in-relational-database-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pitfalls in Relational Database Design
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functional-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functional Dependencies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Functional Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trivial-dependency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trivial Dependency
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#closure-of-functional-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Closure of Functional Dependencies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Closure of Functional Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#armstrongs-axioms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Armstrong's Axioms
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#closure-of-attribute-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Closure of Attribute Sets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#canonical-cover" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Canonical Cover
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Canonical Cover">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extraneous-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extraneous Attributes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decomposition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decomposition
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Decomposition">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lossless-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lossless Join
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependency-preservation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency Preservation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#boyce-codd-normal-form" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boyce-Codd Normal Form
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Boyce-Codd Normal Form">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bcnf-decomposition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BCNF Decomposition
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#third-normal-form" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Third Normal Form
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Third Normal Form">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3nf-decomposition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3NF Decomposition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bcnf-vs-3nf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BCNF vs 3NF
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multivalued-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multivalued Dependencies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Multivalued Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition-of-mvd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition of MVD
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fourth-normal-form" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fourth Normal Form
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#overall-design-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overall Design Process
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overall Design Process">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#denormalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Denormalization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-design-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other Design Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>lec06 Relational Database Design</h1>
+
+<p>在上一章中，我们从 ER 图出发，将现实世界的实体和联系转化为了关系模式。现在的问题是：这样的关系模式是不是足够好？如果一个关系模式设计得不好，就会出现数据冗余、插入异常、删除异常和更新异常。本章讨论的就是如何用函数依赖、多值依赖和范式理论来判断并改进关系数据库设计。</p>
+<h2 id="first-normal-form">First Normal Form<a class="headerlink" href="#first-normal-form" title="Permanent link">&para;</a></h2>
+<p>我们先从最基本的第一范式（First Normal Form, 1NF）开始。一个域是<strong>原子的</strong>（atomic），意思是数据库不再把其中的值继续拆分使用。若一个关系模式 <span class="arithmatex">\(R\)</span> 的所有属性域都是原子的，那么 <span class="arithmatex">\(R\)</span> 就满足第一范式。</p>
+<div class="admonition note">
+<p class="admonition-title">1NF 的直观理解</p>
+<p>关系数据库默认要求所有关系都在 1NF 中。也就是说，表格中的一个单元格应该是一个普通值，而不是一个集合、列表、嵌套对象或复杂结构。</p>
+</div>
+<p>下面这些都属于非原子值的典型情况：</p>
+<ul>
+<li>复合属性：比如把完整姓名作为一个字段，但之后又需要拆分出姓和名；</li>
+<li>多值属性：比如一个人的所有电话号码都放在同一个字段中；</li>
+<li>复杂数据类型：比如面向对象数据库中的对象、集合等结构。</li>
+</ul>
+<p>如果遇到非原子属性，我们一般有几种处理方式：</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="first-normal-form-复合属性" name="__tabbed_1" type="radio" /><input id="first-normal-form-多值属性" name="__tabbed_1" type="radio" /><input id="first-normal-form-不推荐做法" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="first-normal-form-复合属性">复合属性</label><label for="first-normal-form-多值属性">多值属性</label><label for="first-normal-form-不推荐做法">不推荐做法</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>把复合属性拆成多个属性。比如：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>customer(customer-id, first-name, last-name, street, city)
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>更推荐的方法是单独建表：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>person(pname, ...)
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>phone(pname, phone-number)
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>把多个电话写成 <code>phone1, phone2, phone3</code>，或者把所有电话塞进一个 <code>phones</code> 字段。这样会让查询、更新和约束检查都变复杂。</p>
+</div>
+</div>
+</div>
+<p>需要注意的是，原子性并不是单纯由数据类型决定的，而是由<strong>使用方式</strong>决定的。比如字符串通常可以看成原子值，但如果学号形如 <code>CS0012</code>，并且应用程序会取前两个字符来判断院系，那么这个字符串就不再是真正的原子值。更好的做法是把院系作为独立属性存进数据库，而不是把信息编码进字符串中。</p>
+<h2 id="pitfalls-in-relational-database-design">Pitfalls in Relational Database Design<a class="headerlink" href="#pitfalls-in-relational-database-design" title="Permanent link">&para;</a></h2>
+<p>关系数据库设计的目标是找到一组“好”的关系模式。坏的设计通常会导致：</p>
+<ul>
+<li>冗余存储：同一事实被重复记录多次；</li>
+<li>更新异常：修改一个事实时需要改很多行，容易不一致；</li>
+<li>插入异常：想插入某些事实时，因为缺少其它事实而无法插入；</li>
+<li>删除异常：删除某些事实时，连带丢失了本来还想保留的信息。</li>
+</ul>
+<p>考虑如下关系模式：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Lending-schema = (
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    branch-name, branch-city, assets,
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    customer-name, loan-number, amount
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>)
+</span></code></pre></div>
+<p>假设它的主键是 <code>(branch-name, customer-name, loan-number)</code>。这张表把支行信息、客户信息和贷款信息混在了一起。对于同一个支行，它的 <code>branch-city</code> 和 <code>assets</code> 会在每一笔贷款中重复出现。</p>
+<div class="admonition warning">
+<p class="admonition-title">这个模式的问题</p>
+<p>如果某个支行的资产发生变化，那么所有涉及该支行贷款的元组都要修改。只要漏改一行，就会产生不一致。更麻烦的是，如果一个支行暂时没有任何贷款，我们可能无法自然地保存这个支行的信息，除非引入大量 null 值。</p>
+</div>
+<p>一种自然的改进方式是<strong>分解</strong>（decomposition）：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Branch-schema = (branch-name, branch-city, assets)
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Loan-info-schema = (branch-name, customer-name, loan-number, amount)
+</span></code></pre></div>
+<p>分解的基本要求有两个。首先，原模式中的所有属性都必须出现在分解后的模式中。其次，更重要的是，分解应该是<strong>无损连接分解</strong>（lossless-join decomposition），也就是分解之后再自然连接回来，不能多出或少掉元组。</p>
+<div class="admonition example">
+<p class="admonition-title">一个有损分解</p>
+<p>如果 <span class="arithmatex">\(R(A,B)\)</span> 被分解成 <span class="arithmatex">\(R_1(A)\)</span> 和 <span class="arithmatex">\(R_2(B)\)</span>，那么投影后再连接得到的是 <span class="arithmatex">\(A\)</span> 和 <span class="arithmatex">\(B\)</span> 的笛卡尔组合。这个结果通常会比原来的 <span class="arithmatex">\(R\)</span> 多出许多元组，因此不是无损连接分解。</p>
+</div>
+<h2 id="functional-dependencies">Functional Dependencies<a class="headerlink" href="#functional-dependencies" title="Permanent link">&para;</a></h2>
+<p>为了形式化地判断一个关系模式是否“好”，我们需要引入<strong>函数依赖</strong>（Functional Dependency, FD）。</p>
+<p>设 <span class="arithmatex">\(R\)</span> 是一个关系模式，<span class="arithmatex">\(\alpha\subseteq R,\beta\subseteq R\)</span>。如果对于 <span class="arithmatex">\(R\)</span> 上的任何合法关系 <span class="arithmatex">\(r\)</span>，任意两个元组 <span class="arithmatex">\(t_1,t_2\)</span> 只要满足：</p>
+<div class="arithmatex">\[
+t_1[\alpha]=t_2[\alpha]
+\]</div>
+<p>就一定满足：</p>
+<div class="arithmatex">\[
+t_1[\beta]=t_2[\beta]
+\]</div>
+<p>那么我们说函数依赖 <span class="arithmatex">\(\alpha\to\beta\)</span> 在 <span class="arithmatex">\(R\)</span> 上成立。也可以说，<span class="arithmatex">\(\alpha\)</span> 函数决定 <span class="arithmatex">\(\beta\)</span>，或者 <span class="arithmatex">\(\beta\)</span> 函数依赖于 <span class="arithmatex">\(\alpha\)</span>。</p>
+<div class="admonition note">
+<p class="admonition-title">FD 和具体实例的区别</p>
+<p>某个具体关系实例满足一个函数依赖，并不代表该函数依赖就在关系模式上成立。模式上的函数依赖来自语义约束，而不是单纯从某一张表当前的数据中“猜”出来的。</p>
+</div>
+<p>函数依赖可以看成键的推广：</p>
+<ul>
+<li><span class="arithmatex">\(K\)</span> 是 <span class="arithmatex">\(R\)</span> 的超键，当且仅当 <span class="arithmatex">\(K\to R\)</span>；</li>
+<li><span class="arithmatex">\(K\)</span> 是 <span class="arithmatex">\(R\)</span> 的候选键，当且仅当 <span class="arithmatex">\(K\to R\)</span>，并且不存在真子集 <span class="arithmatex">\(\alpha\subset K\)</span> 满足 <span class="arithmatex">\(\alpha\to R\)</span>；</li>
+<li>函数依赖还可以表达许多键无法表达的约束。</li>
+</ul>
+<p>比如：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Loan-info-schema = (customer-name, loan-number, branch-name, amount)
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>F = {
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    loan-number -&gt; amount,
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    loan-number -&gt; branch-name,
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    (customer-name, loan-number) -&gt; amount,
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    (customer-name, loan-number) -&gt; branch-name
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>}
+</span></code></pre></div>
+<p>这里我们通常不希望 <code>loan-number -&gt; customer-name</code> 成立，因为一笔贷款可能有多个借款人。</p>
+<h3 id="trivial-dependency">Trivial Dependency<a class="headerlink" href="#trivial-dependency" title="Permanent link">&para;</a></h3>
+<p>如果一个函数依赖对所有关系都成立，那么它就是<strong>平凡函数依赖</strong>。一般地：</p>
+<div class="arithmatex">\[
+\alpha\to\beta\text{ is trivial}\iff \beta\subseteq\alpha
+\]</div>
+<p>例如：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>A -&gt; A
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>AB -&gt; A
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>(customer-name, loan-number) -&gt; customer-name
+</span></code></pre></div>
+<h2 id="closure-of-functional-dependencies">Closure of Functional Dependencies<a class="headerlink" href="#closure-of-functional-dependencies" title="Permanent link">&para;</a></h2>
+<p>给定函数依赖集 <span class="arithmatex">\(F\)</span>，我们可以从 <span class="arithmatex">\(F\)</span> 推出更多函数依赖。所有能由 <span class="arithmatex">\(F\)</span> 逻辑推出的函数依赖集合，称为 <span class="arithmatex">\(F\)</span> 的闭包，记作 <span class="arithmatex">\(F^+\)</span>。</p>
+<p>例如：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>F = {A -&gt; B, B -&gt; C}
+</span></code></pre></div>
+<p>那么 <span class="arithmatex">\(A\to C\)</span> 也应该在 <span class="arithmatex">\(F^+\)</span> 中。</p>
+<h3 id="armstrongs-axioms">Armstrong's Axioms<a class="headerlink" href="#armstrongs-axioms" title="Permanent link">&para;</a></h3>
+<p>Armstrong 公理提供了一组求闭包的推理规则：</p>
+<table>
+<thead>
+<tr>
+<th>规则</th>
+<th>形式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>自反律</td>
+<td>若 <span class="arithmatex">\(\beta\subseteq\alpha\)</span>，则 <span class="arithmatex">\(\alpha\to\beta\)</span></td>
+<td>得到平凡依赖</td>
+</tr>
+<tr>
+<td>增补律</td>
+<td>若 <span class="arithmatex">\(\alpha\to\beta\)</span>，则 <span class="arithmatex">\(\gamma\alpha\to\gamma\beta\)</span></td>
+<td>两边同时加属性</td>
+</tr>
+<tr>
+<td>传递律</td>
+<td>若 <span class="arithmatex">\(\alpha\to\beta,\beta\to\gamma\)</span>，则 <span class="arithmatex">\(\alpha\to\gamma\)</span></td>
+<td>依赖传递</td>
+</tr>
+</tbody>
+</table>
+<p>这组公理是 sound 且 complete 的。也就是说，它推出的依赖都是真的，并且所有真的依赖最终都可以推出。</p>
+<p>在手算时，我们还经常使用一些由 Armstrong 公理推出的补充规则：</p>
+<ul>
+<li>合并律：若 <span class="arithmatex">\(\alpha\to\beta\)</span> 且 <span class="arithmatex">\(\alpha\to\gamma\)</span>，则 <span class="arithmatex">\(\alpha\to\beta\gamma\)</span>；</li>
+<li>分解律：若 <span class="arithmatex">\(\alpha\to\beta\gamma\)</span>，则 <span class="arithmatex">\(\alpha\to\beta\)</span> 且 <span class="arithmatex">\(\alpha\to\gamma\)</span>；</li>
+<li>伪传递律：若 <span class="arithmatex">\(\alpha\to\beta\)</span> 且 <span class="arithmatex">\(\gamma\beta\to\delta\)</span>，则 <span class="arithmatex">\(\alpha\gamma\to\delta\)</span>。</li>
+</ul>
+<div class="admonition example">
+<p class="admonition-title">闭包推导</p>
+<p>设：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>R = (A, B, C, G, H, I)
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>F = {A -&gt; B, A -&gt; C, CG -&gt; H, CG -&gt; I, B -&gt; H}
+</span></code></pre></div>
+<p>可以推出：</p>
+<ul>
+<li><span class="arithmatex">\(A\to H\)</span>，因为 <span class="arithmatex">\(A\to B\)</span> 且 <span class="arithmatex">\(B\to H\)</span>；</li>
+<li><span class="arithmatex">\(AG\to I\)</span>，因为 <span class="arithmatex">\(A\to C\)</span>，所以 <span class="arithmatex">\(AG\to CG\)</span>，又有 <span class="arithmatex">\(CG\to I\)</span>；</li>
+<li><span class="arithmatex">\(CG\to HI\)</span>，因为 <span class="arithmatex">\(CG\to H\)</span> 且 <span class="arithmatex">\(CG\to I\)</span>。</li>
+</ul>
+</div>
+<h2 id="closure-of-attribute-sets">Closure of Attribute Sets<a class="headerlink" href="#closure-of-attribute-sets" title="Permanent link">&para;</a></h2>
+<p>直接求 <span class="arithmatex">\(F^+\)</span> 代价很大，因为可能的函数依赖数量随属性数指数增长。实际中我们更常用<strong>属性集闭包</strong>。</p>
+<p>给定属性集 <span class="arithmatex">\(\alpha\)</span> 和函数依赖集 <span class="arithmatex">\(F\)</span>，<span class="arithmatex">\(\alpha\)</span> 在 <span class="arithmatex">\(F\)</span> 下的闭包记作 <span class="arithmatex">\(\alpha^+\)</span>，表示所有能由 <span class="arithmatex">\(\alpha\)</span> 函数决定的属性集合。</p>
+<div class="admonition tip">
+<p class="admonition-title">属性闭包的两个最常用判断</p>
+<ul>
+<li>判断 <span class="arithmatex">\(\alpha\)</span> 是否是超键：看 <span class="arithmatex">\(R\subseteq\alpha^+\)</span> 是否成立；</li>
+<li>判断 <span class="arithmatex">\(\alpha\to\beta\)</span> 是否成立：看 <span class="arithmatex">\(\beta\subseteq\alpha^+\)</span> 是否成立。</li>
+</ul>
+</div>
+<p>属性闭包的算法如下：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>result := alpha
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>while result changes:
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    for each beta -&gt; gamma in F:
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>        if beta is contained in result:
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>            result := result union gamma
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>alpha+ := result
+</span></code></pre></div>
+<div class="admonition example">
+<p class="admonition-title">计算属性闭包</p>
+<p>设：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>R = (A, B, C, G, H, I)
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>F = {A -&gt; B, A -&gt; C, CG -&gt; H, CG -&gt; I, B -&gt; H}
+</span></code></pre></div>
+<p>计算 <span class="arithmatex">\((AG)^+\)</span>：</p>
+<ol>
+<li>初始 <code>result = AG</code>；</li>
+<li>由 <code>A -&gt; B</code> 和 <code>A -&gt; C</code>，得到 <code>ABCG</code>；</li>
+<li>由 <code>CG -&gt; H</code>，得到 <code>ABCGH</code>；</li>
+<li>由 <code>CG -&gt; I</code>，得到 <code>ABCGHI</code>。</li>
+</ol>
+<p>因此 <span class="arithmatex">\((AG)^+=R\)</span>，所以 <code>AG</code> 是超键。又因为 <span class="arithmatex">\(A^+=ABCH\)</span>，<span class="arithmatex">\(G^+=G\)</span>，二者都不是超键，所以 <code>AG</code> 是候选键。</p>
+</div>
+<h2 id="canonical-cover">Canonical Cover<a class="headerlink" href="#canonical-cover" title="Permanent link">&para;</a></h2>
+<p>数据库在更新时需要检查函数依赖是否被破坏。如果函数依赖集 <span class="arithmatex">\(F\)</span> 太大，检查成本会很高。因此我们希望找到一个与 <span class="arithmatex">\(F\)</span> 等价但更小的依赖集，称为<strong>正则覆盖</strong>（Canonical Cover），记作 <span class="arithmatex">\(F_c\)</span>。</p>
+<p>直观地说，<span class="arithmatex">\(F_c\)</span> 是一个最小化的函数依赖集，满足：</p>
+<ul>
+<li><span class="arithmatex">\(F_c\)</span> 与 <span class="arithmatex">\(F\)</span> 等价，即二者能相互推出；</li>
+<li>没有冗余的函数依赖；</li>
+<li>函数依赖左右两边没有无关属性；</li>
+<li>左部相同的依赖会尽量合并。</li>
+</ul>
+<h3 id="extraneous-attributes">Extraneous Attributes<a class="headerlink" href="#extraneous-attributes" title="Permanent link">&para;</a></h3>
+<p>如果一个属性从函数依赖中删掉后，不改变整个依赖集表达的约束，那么它就是<strong>无关属性</strong>（extraneous attribute）。</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="extraneous-attributes-左部无关属性" name="__tabbed_2" type="radio" /><input id="extraneous-attributes-右部无关属性" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="extraneous-attributes-左部无关属性">左部无关属性</label><label for="extraneous-attributes-右部无关属性">右部无关属性</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>对于 <span class="arithmatex">\(\alpha\to\beta\)</span>，如果 <span class="arithmatex">\(A\in\alpha\)</span>，并且用 <span class="arithmatex">\((\alpha-A)\to\beta\)</span> 替换原依赖后，仍然与原依赖集等价，那么 <span class="arithmatex">\(A\)</span> 在左部是无关属性。</p>
+<p>测试方法：计算 <span class="arithmatex">\((\alpha-A)^+\)</span>，如果包含 <span class="arithmatex">\(\beta\)</span>，则 <span class="arithmatex">\(A\)</span> 可删。</p>
+</div>
+<div class="tabbed-block">
+<p>对于 <span class="arithmatex">\(\alpha\to\beta\)</span>，如果 <span class="arithmatex">\(A\in\beta\)</span>，令：</p>
+<div class="arithmatex">\[
+F'=(F-\{\alpha\to\beta\})\cup\{\alpha\to(\beta-A)\}
+\]</div>
+<p>如果在 <span class="arithmatex">\(F'\)</span> 下仍能推出 <span class="arithmatex">\(\alpha\to A\)</span>，那么 <span class="arithmatex">\(A\)</span> 在右部是无关属性。</p>
+</div>
+</div>
+</div>
+<div class="admonition example">
+<p class="admonition-title">正则覆盖计算</p>
+<p>设：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>R = (A, B, C)
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>F = {A -&gt; BC, B -&gt; C, A -&gt; B, AB -&gt; C}
+</span></code></pre></div>
+<p>先合并左部相同的依赖，得到：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>F&#39; = {A -&gt; BC, B -&gt; C, AB -&gt; C}
+</span></code></pre></div>
+<p><code>AB -&gt; C</code> 中的 <code>A</code> 是无关的，因为已有 <code>B -&gt; C</code>。删去后又发现 <code>A -&gt; BC</code> 中的 <code>C</code> 是无关的，因为 <code>A -&gt; B</code> 且 <code>B -&gt; C</code>。所以最终：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Fc = {A -&gt; B, B -&gt; C}
+</span></code></pre></div>
+</div>
+<h2 id="decomposition">Decomposition<a class="headerlink" href="#decomposition" title="Permanent link">&para;</a></h2>
+<p>规范化的核心技术就是分解。对于一个关系模式 <span class="arithmatex">\(R\)</span>，我们希望把它分解为若干关系模式 <span class="arithmatex">\(R_1,R_2,\dots,R_n\)</span>，并尽量满足：</p>
+<ul>
+<li>无损连接分解；</li>
+<li>依赖保持；</li>
+<li>每个子模式都处于足够好的范式，如 BCNF 或 3NF。</li>
+</ul>
+<h3 id="lossless-join">Lossless Join<a class="headerlink" href="#lossless-join" title="Permanent link">&para;</a></h3>
+<p>对于二元分解 <span class="arithmatex">\(R\to R_1,R_2\)</span>，无损连接的判别条件非常常用：</p>
+<div class="arithmatex">\[
+R_1\cap R_2\to R_1
+\]</div>
+<p>或：</p>
+<div class="arithmatex">\[
+R_1\cap R_2\to R_2
+\]</div>
+<p>只要其中一个依赖在 <span class="arithmatex">\(F^+\)</span> 中成立，该分解就是无损连接分解。</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>通俗地说，两个子模式的公共属性必须能作为其中至少一边的键，这样连接时才不会产生额外组合。</p>
+</div>
+<h3 id="dependency-preservation">Dependency Preservation<a class="headerlink" href="#dependency-preservation" title="Permanent link">&para;</a></h3>
+<p>依赖保持的意义是：我们可以在各个子关系上分别检查函数依赖，而不需要先把所有子关系连接回原关系。</p>
+<p>设 <span class="arithmatex">\(F_i\)</span> 是 <span class="arithmatex">\(F^+\)</span> 中只涉及 <span class="arithmatex">\(R_i\)</span> 属性的函数依赖集合。如果：</p>
+<div class="arithmatex">\[
+(F_1\cup F_2\cup\cdots\cup F_n)^+=F^+
+\]</div>
+<p>那么该分解是依赖保持的。</p>
+<div class="admonition example">
+<p class="admonition-title">无损但不一定保持依赖</p>
+<p>设：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>R = (A, B, C)
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>F = {A -&gt; B, B -&gt; C}
+</span></code></pre></div>
+<p>分解为 <code>R1(A,B), R2(B,C)</code> 时，公共属性为 <code>B</code>，且 <code>B -&gt; C</code>，所以无损；同时 <code>A -&gt; B</code> 和 <code>B -&gt; C</code> 分别保留在两个子模式中，所以依赖保持。</p>
+<p>但分解为 <code>R1(A,B), R2(A,C)</code> 时，公共属性为 <code>A</code>，且 <code>A -&gt; B</code>，所以仍然无损；可是 <code>B -&gt; C</code> 无法在任何单个子模式中检查，因此不保持依赖。</p>
+</div>
+<h2 id="boyce-codd-normal-form">Boyce-Codd Normal Form<a class="headerlink" href="#boyce-codd-normal-form" title="Permanent link">&para;</a></h2>
+<p>BCNF（Boyce-Codd Normal Form）是一个比较强的范式。关系模式 <span class="arithmatex">\(R\)</span> 在函数依赖集 <span class="arithmatex">\(F\)</span> 下满足 BCNF，当且仅当对于 <span class="arithmatex">\(F^+\)</span> 中每一个形如 <span class="arithmatex">\(\alpha\to\beta\)</span> 的函数依赖，至少满足以下条件之一：</p>
+<ol>
+<li><span class="arithmatex">\(\alpha\to\beta\)</span> 是平凡依赖；</li>
+<li><span class="arithmatex">\(\alpha\)</span> 是 <span class="arithmatex">\(R\)</span> 的超键。</li>
+</ol>
+<p>换句话说，在 BCNF 中，任何非平凡函数依赖的左部都必须是超键。</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>设：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>R = (A, B, C)
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>F = {A -&gt; B, B -&gt; C}
+</span></code></pre></div>
+<p>由于 <span class="arithmatex">\(A^+=ABC\)</span>，所以 <code>A</code> 是键。但是对于 <code>B -&gt; C</code>，<code>B</code> 不是键，因此 <span class="arithmatex">\(R\)</span> 不满足 BCNF。可以分解为：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>R1(A, B)
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>R2(B, C)
+</span></code></pre></div>
+<p>二者都在 BCNF 中，且该分解无损并保持依赖。</p>
+</div>
+<h3 id="bcnf-decomposition">BCNF Decomposition<a class="headerlink" href="#bcnf-decomposition" title="Permanent link">&para;</a></h3>
+<p>BCNF 分解算法的思想很直接：只要某个子模式中存在违反 BCNF 的非平凡依赖 <span class="arithmatex">\(\alpha\to\beta\)</span>，就把它拆成两部分：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>Ri1 = alpha union beta
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>Ri2 = Ri - beta
+</span></code></pre></div>
+<p>算法形式如下：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>result := {R}
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>compute F+
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>while some Ri in result is not in BCNF:
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>    choose a nontrivial dependency alpha -&gt; beta on Ri
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>    such that alpha is not a superkey
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>    result := (result - Ri) union (alpha, beta) union (Ri - beta)
+</span></code></pre></div>
+<p>最终得到的每个子模式都在 BCNF 中，并且分解是无损连接的。</p>
+<div class="admonition warning">
+<p class="admonition-title">BCNF 的代价</p>
+<p>BCNF 分解不一定保持依赖。也就是说，BCNF、无损连接、依赖保持这三个目标不能总是同时满足。</p>
+</div>
+<p>经典例子是：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>R = (J, K, L)
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>F = {JK -&gt; L, L -&gt; K}
+</span></code></pre></div>
+<p>其中候选键是 <code>JK</code> 和 <code>JL</code>。依赖 <code>L -&gt; K</code> 违反 BCNF，因为 <code>L</code> 不是超键。但任何 BCNF 分解都会破坏 <code>JK -&gt; L</code> 的依赖保持。</p>
+<h2 id="third-normal-form">Third Normal Form<a class="headerlink" href="#third-normal-form" title="Permanent link">&para;</a></h2>
+<p>第三范式（Third Normal Form, 3NF）比 BCNF 稍弱。引入它的动机是：有时 BCNF 分解不能保持依赖，但我们又希望更新检查尽量高效。</p>
+<p>关系模式 <span class="arithmatex">\(R\)</span> 在 <span class="arithmatex">\(F\)</span> 下满足 3NF，当且仅当对 <span class="arithmatex">\(F^+\)</span> 中每个 <span class="arithmatex">\(\alpha\to\beta\)</span>，至少满足以下条件之一：</p>
+<ol>
+<li><span class="arithmatex">\(\alpha\to\beta\)</span> 是平凡依赖；</li>
+<li><span class="arithmatex">\(\alpha\)</span> 是 <span class="arithmatex">\(R\)</span> 的超键；</li>
+<li><span class="arithmatex">\(\beta-\alpha\)</span> 中的每个属性都属于 <span class="arithmatex">\(R\)</span> 的某个候选键。</li>
+</ol>
+<p>第三个条件是对 BCNF 的最小放松。它允许某些左部不是超键的依赖存在，但要求右部是主属性。</p>
+<div class="admonition note">
+<p class="admonition-title">BCNF 与 3NF</p>
+<p>如果一个关系模式在 BCNF 中，那么它一定在 3NF 中。但反过来不一定成立。</p>
+</div>
+<h3 id="3nf-decomposition">3NF Decomposition<a class="headerlink" href="#3nf-decomposition" title="Permanent link">&para;</a></h3>
+<p>3NF 的一个重要优点是：总能得到一个无损连接、依赖保持的 3NF 分解。</p>
+<p>算法如下：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>Fc := canonical cover of F
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>result := empty set
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>for each dependency alpha -&gt; beta in Fc:
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>    if no schema in result contains alpha beta:
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>        add schema (alpha beta) into result
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>if no schema in result contains a candidate key for R:
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>    add any candidate key of R into result
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>return result
+</span></code></pre></div>
+<p>其中前半部分保证依赖保持，最后加入候选键是为了保证无损连接。</p>
+<div class="admonition example">
+<p class="admonition-title">3NF 分解</p>
+<p>设：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>Banker-info-schema = (
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>    branch-name, customer-name,
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>    banker-name, office-number
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>)
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>F = {
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>    banker-name -&gt; branch-name office-number,
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>    customer-name branch-name -&gt; banker-name
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>}
+</span></code></pre></div>
+<p>其候选键是 <code>{customer-name, branch-name}</code>。根据 3NF 分解算法，可以得到：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>Banker-office-schema = (banker-name, branch-name, office-number)
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>Banker-schema = (customer-name, branch-name, banker-name)
+</span></code></pre></div>
+<p>第二个关系中已经包含原模式的候选键，所以不需要额外添加关系。</p>
+</div>
+<h3 id="bcnf-vs-3nf">BCNF vs 3NF<a class="headerlink" href="#bcnf-vs-3nf" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>性质</th>
+<th>BCNF</th>
+<th>3NF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>冗余控制</td>
+<td>更强</td>
+<td>稍弱</td>
+</tr>
+<tr>
+<td>无损连接</td>
+<td>总能做到</td>
+<td>总能做到</td>
+</tr>
+<tr>
+<td>依赖保持</td>
+<td>不一定能做到</td>
+<td>总能做到</td>
+</tr>
+<tr>
+<td>使用场景</td>
+<td>优先目标</td>
+<td>当依赖保持很重要时使用</td>
+</tr>
+</tbody>
+</table>
+<p>因此设计目标一般是先尝试 BCNF。如果无法同时保持依赖，就需要在“不保持依赖”和“接受 3NF 的少量冗余”之间做取舍。</p>
+<details class="tip">
+<summary>SQL 中的现实问题</summary>
+<p>SQL 对函数依赖的直接支持其实比较有限。除了主键、唯一约束这类“左部是键”的依赖之外，普通函数依赖通常需要用 assertion 或触发器等方式维护，代价较高。因此依赖保持在实际系统中仍然很有价值。</p>
+</details>
+<h2 id="multivalued-dependencies">Multivalued Dependencies<a class="headerlink" href="#multivalued-dependencies" title="Permanent link">&para;</a></h2>
+<p>即使一个关系模式已经在 BCNF 中，也未必完全消除了冗余。这时需要讨论<strong>多值依赖</strong>（Multivalued Dependency, MVD）。</p>
+<p>考虑关系：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>classes(course, teacher, book)
+</span></code></pre></div>
+<p>含义是某门课有若干可授课教师，也有若干指定教材。教师集合和教材集合对同一门课来说是彼此独立的：无论哪位老师教这门课，教材集合都相同。</p>
+<p>如果直接存成三列表，就会出现组合冗余：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>(database, Avi, DB Concepts)
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>(database, Avi, DB system)
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>(database, Hank, DB Concepts)
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>(database, Hank, DB system)
+</span></code></pre></div>
+<p>如果新增一个老师 <code>Sara</code> 可以教 <code>database</code>，那么需要为她和每本教材都插入一行。这并不是函数依赖能解决的问题，因为这个表中通常只有平凡函数依赖，甚至已经满足 BCNF。</p>
+<p>更好的设计是分解为：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>teaches(course, teacher)
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>text(course, book)
+</span></code></pre></div>
+<h3 id="definition-of-mvd">Definition of MVD<a class="headerlink" href="#definition-of-mvd" title="Permanent link">&para;</a></h3>
+<p>设 <span class="arithmatex">\(R\)</span> 是关系模式，<span class="arithmatex">\(\alpha\subseteq R,\beta\subseteq R\)</span>。如果对于任意合法关系 <span class="arithmatex">\(r(R)\)</span> 中满足 <span class="arithmatex">\(t_1[\alpha]=t_2[\alpha]\)</span> 的两个元组，总能在 <span class="arithmatex">\(r\)</span> 中找到元组 <span class="arithmatex">\(t_3,t_4\)</span>，使得它们在 <span class="arithmatex">\(\alpha\)</span> 上相同，并且交换 <span class="arithmatex">\(\beta\)</span> 与剩余属性的组合后仍然存在，那么称：</p>
+<div class="arithmatex">\[
+\alpha\twoheadrightarrow\beta
+\]</div>
+<p>在 <span class="arithmatex">\(R\)</span> 上成立。</p>
+<p>直观地说，<span class="arithmatex">\(\alpha\twoheadrightarrow\beta\)</span> 表示：给定 <span class="arithmatex">\(\alpha\)</span> 后，<span class="arithmatex">\(\beta\)</span> 的取值集合与剩余属性的取值集合相互独立。</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>在 <code>classes(course, teacher, book)</code> 中：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>course -&gt;-&gt; teacher
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>course -&gt;-&gt; book
+</span></code></pre></div>
+<p>因为对于一门课，教师集合和教材集合是两个独立的多值集合。</p>
+</div>
+<p>如果 <span class="arithmatex">\(\beta\subseteq\alpha\)</span>，或者 <span class="arithmatex">\(\alpha\cup\beta=R\)</span>，则该多值依赖是平凡的。并且每一个函数依赖都可以看成一种特殊的多值依赖。</p>
+<h2 id="fourth-normal-form">Fourth Normal Form<a class="headerlink" href="#fourth-normal-form" title="Permanent link">&para;</a></h2>
+<p>第四范式（Fourth Normal Form, 4NF）用来处理多值依赖带来的冗余。关系模式 <span class="arithmatex">\(R\)</span> 在函数依赖和多值依赖集合 <span class="arithmatex">\(D\)</span> 下满足 4NF，当且仅当对于 <span class="arithmatex">\(D^+\)</span> 中每个形如：</p>
+<div class="arithmatex">\[
+\alpha\twoheadrightarrow\beta
+\]</div>
+<p>的多值依赖，至少满足：</p>
+<ol>
+<li>该多值依赖是平凡的；</li>
+<li><span class="arithmatex">\(\alpha\)</span> 是 <span class="arithmatex">\(R\)</span> 的超键。</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>如果一个关系在 4NF 中，那么它一定在 BCNF 中。因为函数依赖也是一种特殊的多值依赖。</p>
+</div>
+<p>4NF 分解算法与 BCNF 分解算法非常相似。遇到违反 4NF 的非平凡多值依赖 <span class="arithmatex">\(\alpha\twoheadrightarrow\beta\)</span>，且 <span class="arithmatex">\(\alpha\)</span> 不是超键，就分解为：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>R1 = alpha union beta
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>R2 = R - beta
+</span></code></pre></div>
+<p>最终得到的各个子模式都在 4NF 中，并且分解是无损连接的。</p>
+<div class="admonition example">
+<p class="admonition-title">4NF 分解</p>
+<p>设：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>R = (A, B, C, G, H, I)
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>D = {
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>    A -&gt;-&gt; B,
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>    B -&gt;-&gt; HI,
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>    CG -&gt;-&gt; H
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>}
+</span></code></pre></div>
+<p>因为 <code>A -&gt;-&gt; B</code> 非平凡，且 <code>A</code> 不是超键，所以 <span class="arithmatex">\(R\)</span> 不满足 4NF。可以先分解为：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>R1(A, B)
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>R2(A, C, G, H, I)
+</span></code></pre></div>
+<p>若 <code>R2</code> 仍不满足 4NF，则继续根据其中的多值依赖分解，直到每个子模式都满足 4NF。</p>
+</div>
+<h2 id="overall-design-process">Overall Design Process<a class="headerlink" href="#overall-design-process" title="Permanent link">&para;</a></h2>
+<p>最后，我们回到数据库设计的整体视角。规范化理论通常假设某个关系模式 <span class="arithmatex">\(R\)</span> 已经给定。这个 <span class="arithmatex">\(R\)</span> 可能来自：</p>
+<ul>
+<li>ER 图转换得到的一组表；</li>
+<li>包含所有属性的泛关系（universal relation）；</li>
+<li>一次临时或经验性的关系设计。</li>
+</ul>
+<p>如果 ER 图设计得足够好，并且实体、联系都识别准确，那么由 ER 图转换得到的表一般不需要再做大量规范化。但现实中设计很容易不完美，比如把 <code>department-number</code> 和 <code>department-address</code> 都放进 <code>employee</code> 实体中，此时会出现：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>department-number -&gt; department-address
+</span></code></pre></div>
+<p>这说明 <code>department</code> 其实应该被建成单独的实体集。</p>
+<h3 id="denormalization">Denormalization<a class="headerlink" href="#denormalization" title="Permanent link">&para;</a></h3>
+<p>规范化不是绝对目标。有时为了性能，我们会故意使用非规范化设计。</p>
+<p>比如展示：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>(customer-name, account-number, balance)
+</span></code></pre></div>
+<p>可能需要连接 <code>account</code> 和 <code>depositor</code>。如果这个查询非常频繁，可以考虑：</p>
+<ul>
+<li>建一个冗余关系，直接保存这些属性；</li>
+<li>建一个物化视图，由数据库维护连接结果。</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">反规范化的代价</p>
+<p>反规范化可以加速查询，但会带来额外存储、额外更新成本，以及维护一致性的风险。它应该是性能分析之后的工程选择，而不是默认设计方式。</p>
+</div>
+<h3 id="other-design-issues">Other Design Issues<a class="headerlink" href="#other-design-issues" title="Permanent link">&para;</a></h3>
+<p>有些坏设计并不能单纯靠范式发现。比如要记录公司每年的收益：</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:3"><input checked="checked" id="other-design-issues-坏设计-1" name="__tabbed_3" type="radio" /><input id="other-design-issues-坏设计-2" name="__tabbed_3" type="radio" /><input id="other-design-issues-更好的设计" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="other-design-issues-坏设计-1">坏设计 1</label><label for="other-design-issues-坏设计-2">坏设计 2</label><label for="other-design-issues-更好的设计">更好的设计</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>每年一张表：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>earnings-2024(company-id, earnings)
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>earnings-2025(company-id, earnings)
+</span></code></pre></div>
+<p>这种设计跨年份查询困难，而且每年都要建新表。</p>
+</div>
+<div class="tabbed-block">
+<p>每年一个属性：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>company-year(company-id, earnings-2024, earnings-2025, ...)
+</span></code></pre></div>
+<p>这类似电子表格中的交叉表，扩展年份时需要改模式。</p>
+</div>
+<div class="tabbed-block">
+<p>把年份作为普通属性：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>earnings(company-id, year, amount)
+</span></code></pre></div>
+<p>这种设计更符合关系模型，也更方便查询和扩展。</p>
+</div>
+</div>
+</div>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p>本章的主线可以总结为：</p>
+<ol>
+<li>1NF 要求属性域原子化；</li>
+<li>坏的关系模式会导致冗余和各种更新异常；</li>
+<li>函数依赖是判断关系模式好坏的核心工具；</li>
+<li>属性闭包可以用于判断超键、候选键和函数依赖；</li>
+<li>正则覆盖用于简化函数依赖集；</li>
+<li>分解需要尽量保证无损连接和依赖保持；</li>
+<li>BCNF 更严格，但可能不保持依赖；</li>
+<li>3NF 稍弱，但总能做到无损连接和依赖保持；</li>
+<li>多值依赖揭示 BCNF 仍可能存在的冗余；</li>
+<li>4NF 用来进一步处理独立多值集合带来的组合冗余。</li>
+</ol>
+<div class="admonition abstract">
+<p class="admonition-title">范式之间的关系</p>
+<p>一般可以理解为：</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>4NF =&gt; BCNF =&gt; 3NF =&gt; 1NF
+</span></code></pre></div>
+<p>范式越高，冗余约束越强；但实际设计中还要综合考虑依赖保持、查询性能和维护成本。</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="页脚" >
+        
+          
+          <a href="../lec05/" class="md-footer__link md-footer__link--prev" aria-label="上一页: lec05 Entity-Relationship Model">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                lec05 Entity-Relationship Model
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../lec07/" class="md-footer__link md-footer__link--next" aria-label="下一页: lec07 Storage and File Structure">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              <div class="md-ellipsis">
+                lec07 Storage and File Structure
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["toc.follow", "navigation.tabs", "navigation.prune", "navigation.top", "navigation.footer", "content.tooltips", "content.code.select", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
